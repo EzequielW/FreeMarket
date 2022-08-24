@@ -17,7 +17,11 @@ import lombok.Data;
 @Data
 public class Role {
 	
-	@Id
+	public Role(String name) {
+		this.name = name;
+    }
+
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	

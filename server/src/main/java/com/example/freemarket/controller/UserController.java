@@ -16,28 +16,26 @@ import com.example.freemarket.dto.UserResponse;
 import com.example.freemarket.service.IUserService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping(path = "/users")
-@AllArgsConstructor
 public class UserController {
-    @Autowired
-    private IUserService userService;
+    // @Autowired
+    // private IUserService userService;
 
-    @GetMapping("/")
-    public List<UserResponse> getUserList() {
-        return userService.findAllUsers();
-    }
+    // @GetMapping("/")
+    // public List<UserResponse> getUserList() {
+    //     return userService.findAllUsers();
+    // }
     
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable ("id") Long id, @RequestBody UserRequest user){
-        try{
-            return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+    // @PutMapping(value = "/{id}")
+    // public ResponseEntity<Object> updateUser(@PathVariable ("id") Long id, @RequestBody UserRequest user){
+    //     try{
+    //         return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
+    //     }
+    //     catch (Exception e){
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    // }
 
 }

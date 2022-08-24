@@ -21,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
 @NoArgsConstructor
+@EqualsAndHashCode
 @Data
 public class User implements UserDetails{
 	private static final long serialVersionUID = 1L;
@@ -102,5 +104,13 @@ public class User implements UserDetails{
 		return false;
 	}
 
+    public User(String name, String lastname, String email,
+            String password, Role role) {
+		this.name = name;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		this.role = role;
+    }
 
 }

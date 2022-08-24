@@ -32,7 +32,8 @@ public class RegistrationRequest {
     @Schema(description = "User password", example = "hola123")
     private final String password;
     
+    @NonNull
+    @NotNull
     @Schema(description = "User role", example = "ROLE_GUEST")
-    private final String roleName;
-    
+    private String roleName;
 }
