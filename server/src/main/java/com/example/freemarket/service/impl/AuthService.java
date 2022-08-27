@@ -63,23 +63,12 @@ public class AuthService implements IAuthService {
             Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
             System.out.println("UserLogin " + user);
             if(user.isPresent()){
-                userResponse = this.userToUserResponse(user.get());
+                userResponse = userService.userToUserResponse(user.get());
             }
         } catch (Exception e){
             System.out.println("UserLogin " + e.getMessage());
             userResponse = null;
         }
-
-        return userResponse;
-    }
-
-    public UserResponse userToUserResponse(User user){
-        UserResponse userResponse = new UserResponse(
-            user.getId(), 
-            user.getName(), 
-            user.getLastname(), 
-            user.getEmail(), 
-            user.getRole());
 
         return userResponse;
     }

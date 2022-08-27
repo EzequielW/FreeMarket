@@ -33,6 +33,14 @@ public class AuthServiceTest extends SecurityEnabledSetup{
     @Autowired
     IAuthService authService;
 
+    @Configuration
+    public static class Config {
+        @Bean
+        public IAuthService getAuthService() {
+            return new AuthService();
+        }
+    }
+
     @MockBean
     IUserService userService;
 
@@ -44,14 +52,6 @@ public class AuthServiceTest extends SecurityEnabledSetup{
 
     @MockBean
     AuthenticationManager authenticationManager;
-
-    @Configuration
-    public static class Config {
-        @Bean
-        public IAuthService getAuthService() {
-            return new AuthService();
-        }
-    }
 
     RegistrationRequest registrationRequest;
     LoginRequest loginRequest;
@@ -117,6 +117,8 @@ public class AuthServiceTest extends SecurityEnabledSetup{
 
         given(userRepository.findByEmail(loginRequest.getEmail()))
             .willReturn(Optional.of(user));
+        given(userService.userToUserResponse(user))
+            .willReturn(userResponse);
 
         assertEquals(userResponse, authService.login(loginRequest));
     }

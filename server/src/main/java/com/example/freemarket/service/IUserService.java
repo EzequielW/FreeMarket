@@ -10,4 +10,5 @@ import com.example.freemarket.model.User;
 public interface IUserService {
     UserResponse create(User user);
     UserDetails getByEmail(String email);
+    UserResponse userToUserResponse(User user);
 }

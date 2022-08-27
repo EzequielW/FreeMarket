@@ -23,7 +23,16 @@ public class UserService implements UserDetailsService, IUserService{
     UserRepository userRepository;
 
     public UserResponse create(User user){
-        return null;
+        UserResponse userResponse = null;
+
+        try{
+            userRepository.save(user);
+            userResponse = this.userToUserResponse(user);
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        return userResponse;
     }
 
     // It's actually loaded by email, but we need to override the method for spring security to work
@@ -43,5 +52,16 @@ public class UserService implements UserDetailsService, IUserService{
     public UserDetails getByEmail(String email){
         UserDetails userDetails = this.loadUserByUsername(email);
         return userDetails;
+    }
+
+    public UserResponse userToUserResponse(User user){
+        UserResponse userResponse = new UserResponse(
+            user.getId(), 
+            user.getName(), 
+            user.getLastname(), 
+            user.getEmail(), 
+            user.getRole());
+
+        return userResponse;
     }
 }
