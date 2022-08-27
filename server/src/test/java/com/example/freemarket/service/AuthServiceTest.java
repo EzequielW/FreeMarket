@@ -3,6 +3,8 @@ package com.example.freemarket.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,15 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.freemarket.SecurityEnabledSetup;
+import com.example.freemarket.dto.LoginRequest;
 import com.example.freemarket.dto.RegistrationRequest;
 import com.example.freemarket.dto.UserResponse;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
 import com.example.freemarket.repository.RoleRepository;
+import com.example.freemarket.repository.UserRepository;
 import com.example.freemarket.service.impl.AuthService;
 
 
@@ -30,9 +35,15 @@ public class AuthServiceTest extends SecurityEnabledSetup{
 
     @MockBean
     IUserService userService;
+
+    @MockBean
+    UserRepository userRepository;
     
     @MockBean
     RoleRepository roleRepository;
+
+    @MockBean
+    AuthenticationManager authenticationManager;
 
     @Configuration
     public static class Config {
@@ -43,6 +54,7 @@ public class AuthServiceTest extends SecurityEnabledSetup{
     }
 
     RegistrationRequest registrationRequest;
+    LoginRequest loginRequest;
     Role userRole;
     Role adminRole;
     User user;
@@ -52,6 +64,10 @@ public class AuthServiceTest extends SecurityEnabledSetup{
     void setUp(){
         registrationRequest = new RegistrationRequest(
                 "John", "Leanon", "jleanon@email.com", "1234", "ROLE_USER");
+
+        loginRequest = new LoginRequest();
+        loginRequest.setEmail("jleanon@email.com");
+        loginRequest.setPassword("1234");
 
         userRole = new Role("ROLE_USER");
         adminRole = new Role("ROLE_ADMIN");
@@ -90,5 +106,18 @@ public class AuthServiceTest extends SecurityEnabledSetup{
             .willReturn(userResponse);
 
         assertEquals(null, authService.register(registrationRequest));
+    }
+
+    @Test
+    void login_validUser_returnUserResponse(){
+        user.setId(1L);
+        loginRequest.setEmail("jleanon@email.com");
+        loginRequest.setPassword("1234");
+        userResponse.setRole(userRole);
+
+        given(userRepository.findByEmail(loginRequest.getEmail()))
+            .willReturn(Optional.of(user));
+
+        assertEquals(userResponse, authService.login(loginRequest));
     }
 }
