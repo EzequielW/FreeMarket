@@ -29,6 +29,7 @@ public class DataSeedUsers {
 	public void loadData() {
 		if (userDataIsEmpty()) {
 			makeAdminUsers();
+			makeUsers();
 		} else
 			log.info("Users data is not empty");
 		
@@ -53,6 +54,10 @@ public class DataSeedUsers {
             }
 		};
 		saveUsers(listaUsuarios);
+	}
+
+	private void makeUsers(){
+		getRole("ROLE_USER");
 	}
 	
 	private void saveUsers(List<User> users) {
