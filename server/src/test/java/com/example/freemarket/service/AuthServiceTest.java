@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -49,9 +48,6 @@ public class AuthServiceTest extends SecurityEnabledSetup{
     
     @MockBean
     RoleRepository roleRepository;
-
-    @MockBean
-    AuthenticationManager authenticationManager;
 
     RegistrationRequest registrationRequest;
     LoginRequest loginRequest;
@@ -90,6 +86,8 @@ public class AuthServiceTest extends SecurityEnabledSetup{
             .willReturn(userRole);
         given(userService.create(user))
             .willReturn(userResponse);
+        given(bCryptPasswordEncoder.encode(registrationRequest.getPassword()))
+            .willReturn(registrationRequest.getPassword());
 
         assertEquals(userResponse, authService.register(registrationRequest));
     }
@@ -104,6 +102,8 @@ public class AuthServiceTest extends SecurityEnabledSetup{
             .willReturn(adminRole);
         given(userService.create(user))
             .willReturn(userResponse);
+        given(bCryptPasswordEncoder.encode(registrationRequest.getPassword()))
+            .willReturn(registrationRequest.getPassword());
 
         assertEquals(null, authService.register(registrationRequest));
     }
@@ -119,6 +119,8 @@ public class AuthServiceTest extends SecurityEnabledSetup{
             .willReturn(Optional.of(user));
         given(userService.userToUserResponse(user))
             .willReturn(userResponse);
+        given(bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.getPassword()))
+            .willReturn(loginRequest.getPassword() == user.getPassword());
 
         assertEquals(userResponse, authService.login(loginRequest));
     }

@@ -11,9 +11,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "role")
+@NoArgsConstructor
 @Data
 public class Role {
 	

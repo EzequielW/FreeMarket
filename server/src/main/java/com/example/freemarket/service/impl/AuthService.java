@@ -3,8 +3,7 @@ package com.example.freemarket.service.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.freemarket.dto.LoginRequest;
@@ -20,9 +19,6 @@ import com.example.freemarket.model.User;
 @Service
 public class AuthService implements IAuthService {
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
     IUserService userService;
 
     @Autowired
@@ -30,6 +26,9 @@ public class AuthService implements IAuthService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
  
     public UserResponse register(RegistrationRequest request){
         Boolean validUser = true;
@@ -45,8 +44,8 @@ public class AuthService implements IAuthService {
         }
 
         if(validUser){
-            User user = new User(request.getName(), request.getLastname(), request.getEmail(),
-            request.getPassword(), role);
+            String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
+            User user = new User(request.getName(), request.getLastname(), request.getEmail(), encodedPassword, role);
 
             userResponse = userService.create(user);
         }
@@ -58,12 +57,12 @@ public class AuthService implements IAuthService {
         UserResponse userResponse = null;
 
         try{
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             Optional<User> user = userRepository.findByEmail(loginRequest.getEmail());
-            System.out.println("UserLogin " + user);
             if(user.isPresent()){
-                userResponse = userService.userToUserResponse(user.get());
+                System.out.println("Userpassword " + user.get());
+                if(bCryptPasswordEncoder.matches(loginRequest.getPassword(), user.get().getPassword())){
+                    userResponse = userService.userToUserResponse(user.get());
+                }
             }
         } catch (Exception e){
             System.out.println("UserLogin " + e.getMessage());
