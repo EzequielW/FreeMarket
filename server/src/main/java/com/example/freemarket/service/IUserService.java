@@ -9,6 +9,7 @@ import com.example.freemarket.model.User;
 @Service
 public interface IUserService {
     UserResponse create(User user);
-    UserDetails getByEmail(String email);
+    UserDetails getDetailsByEmail(String email);
+    User getByEmail(String email);
     UserResponse userToUserResponse(User user);
 }

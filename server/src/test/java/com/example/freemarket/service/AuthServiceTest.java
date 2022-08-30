@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.freemarket.SecurityEnabledSetup;
 import com.example.freemarket.dto.LoginRequest;
 import com.example.freemarket.dto.RegistrationRequest;
 import com.example.freemarket.dto.UserResponse;
@@ -28,7 +28,7 @@ import com.example.freemarket.service.impl.AuthService;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration
-public class AuthServiceTest extends SecurityEnabledSetup{
+public class AuthServiceTest{
     @Autowired
     IAuthService authService;
 
@@ -39,6 +39,9 @@ public class AuthServiceTest extends SecurityEnabledSetup{
             return new AuthService();
         }
     }
+
+    @MockBean
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @MockBean
     IUserService userService;

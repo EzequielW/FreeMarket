@@ -4,7 +4,6 @@ import javax.servlet.Filter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
     	http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-    		.antMatchers("/auth/login/**","/api-docs/***","/swagger-ui/**","/","/api-docs").permitAll()
-    		.antMatchers(HttpMethod.POST, "/auth/register").permitAll()
+    		.antMatchers("/auth/login/**", "/auth/register/**", "/api-docs/***","/swagger-ui/**","/","/api-docs").permitAll()
+    		.antMatchers("/products/create").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
     		.anyRequest().authenticated();
         http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //Add filters for JWT
     }

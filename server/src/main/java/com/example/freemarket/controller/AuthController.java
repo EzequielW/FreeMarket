@@ -45,7 +45,7 @@ public class AuthController {
         UserResponse userResponse = authService.login(loginRequest);
 
         if(userResponse != null){
-            UserDetails userDetails = userService.getByEmail(userResponse.getEmail());
+            UserDetails userDetails = userService.getDetailsByEmail(userResponse.getEmail());
             String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + jwt)

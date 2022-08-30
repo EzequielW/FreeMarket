@@ -2,20 +2,20 @@ package com.example.freemarket;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.example.freemarket.security.JwtRequestFilter;
 import com.example.freemarket.security.WebSecurityConfig;
+import com.example.freemarket.service.impl.UserService;
+import com.example.freemarket.util.JwtUtil;
 
 @Import(WebSecurityConfig.class)
 public abstract class SecurityEnabledSetup {
     @MockBean
-    protected UserDetailsService userDetailsService;
-
-    @MockBean
-    protected JwtRequestFilter jwtRequestFilter;
+    private UserService userService;
 
     @MockBean
     protected BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @MockBean
+    protected JwtUtil jwtUtil;
 }

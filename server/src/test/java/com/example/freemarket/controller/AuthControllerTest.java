@@ -12,7 +12,6 @@ import static org.mockito.BDDMockito.given;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -28,11 +27,9 @@ import com.example.freemarket.dto.UserResponse;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.service.IAuthService;
 import com.example.freemarket.service.IUserService;
-import com.example.freemarket.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(controllers = AuthController.class)
-@AutoConfigureMockMvc(addFilters = false)
 public class AuthControllerTest extends SecurityEnabledSetup {
     @Autowired
     private MockMvc mockMvc;
@@ -45,9 +42,6 @@ public class AuthControllerTest extends SecurityEnabledSetup {
 
     @MockBean(name="userService")
     IUserService userService;
-
-    @MockBean(name="jwtUtil")
-    JwtUtil jwtUtil;
 
     @Test
     void registerUser_validUser_returnOk() throws Exception {
@@ -84,7 +78,7 @@ public class AuthControllerTest extends SecurityEnabledSetup {
 
         given(authService.login(loginRequest))
             .willReturn(userResponse);
-        given(userService.getByEmail("jleanon@email.com"))
+        given(userService.getDetailsByEmail("jleanon@email.com"))
             .willReturn(userDetails);
         given(jwtUtil.generateToken(userDetails))
             .willReturn("examplejwt");

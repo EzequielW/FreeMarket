@@ -49,9 +49,20 @@ public class UserService implements UserDetailsService, IUserService{
         }
     }
 
-    public UserDetails getByEmail(String email){
+    public UserDetails getDetailsByEmail(String email){
         UserDetails userDetails = this.loadUserByUsername(email);
         return userDetails;
+    }
+
+    public User getByEmail(String email){
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        User user = null;
+
+        if(optionalUser.isPresent()){
+            user = optionalUser.get();
+        }
+
+        return user;
     }
 
     public UserResponse userToUserResponse(User user){
