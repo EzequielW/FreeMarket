@@ -13,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.freemarket.dto.LoginRequest;
@@ -27,7 +26,6 @@ import com.example.freemarket.service.impl.AuthService;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration
 public class AuthServiceTest{
     @Autowired
     IAuthService authService;

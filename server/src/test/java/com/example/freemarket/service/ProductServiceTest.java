@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.freemarket.model.Product;
@@ -21,7 +20,6 @@ import com.example.freemarket.repository.ProductRepository;
 import com.example.freemarket.service.impl.ProductService;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration
 public class ProductServiceTest{
     @Autowired
     IProductService productService;

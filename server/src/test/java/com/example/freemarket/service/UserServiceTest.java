@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.freemarket.dto.UserResponse;
@@ -19,7 +18,6 @@ import com.example.freemarket.repository.UserRepository;
 import com.example.freemarket.service.impl.UserService;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration
 public class UserServiceTest{
     @Autowired
     IUserService userService;
