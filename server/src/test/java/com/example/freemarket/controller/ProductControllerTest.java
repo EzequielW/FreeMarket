@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.freemarket.SecurityEnabledSetup;
 import com.example.freemarket.dto.ProductRequest;
+import com.example.freemarket.model.Category;
 import com.example.freemarket.model.Product;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
@@ -44,8 +45,9 @@ public class ProductControllerTest extends SecurityEnabledSetup{
     void create_validProduct_returnOk() throws Exception {
         Role role = new Role("ROLE_USER");
         User user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
-        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230));
-        Product product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user);
+        Category category = new Category("CPU");
+        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), category);
+        Product product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user, category);
 
         given(userService.getByEmail("jleanon@email.com"))
             .willReturn(user);

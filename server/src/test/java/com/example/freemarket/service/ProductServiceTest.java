@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.example.freemarket.model.Category;
 import com.example.freemarket.model.Product;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
@@ -38,12 +39,14 @@ public class ProductServiceTest{
     Product newProduct;
     User user;
     Role role;
+    Category category;
 
     @BeforeEach
     void setUp(){
         role = new Role("ROLE_USER");
         user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
-        newProduct = new Product("CPU AMD 5600x", BigDecimal.valueOf(230), user);
+        category = new Category("CPU");
+        newProduct = new Product("CPU AMD 5600x", BigDecimal.valueOf(230), user, category);
     }
 
     @Test

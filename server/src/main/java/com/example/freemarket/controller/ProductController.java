@@ -30,7 +30,7 @@ public class ProductController {
     @PostMapping(path = "/create")
     public ResponseEntity<Object> create(@RequestBody ProductRequest productRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
-        Product newProduct = new Product(productRequest.getName(), productRequest.getPrice(), user);
+        Product newProduct = new Product(productRequest.getName(), productRequest.getPrice(), user, productRequest.getCategory());
         
         Product product = productService.create(newProduct);
 
