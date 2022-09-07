@@ -61,7 +61,7 @@ public class ProductControllerTest extends SecurityEnabledSetup{
             .willReturn(category);
 
         String json = mapper.writeValueAsString(productRequest);
-        mockMvc.perform(post("/products/create")
+        mockMvc.perform(post("/products")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)

@@ -4,6 +4,7 @@ import javax.servlet.Filter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,8 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
     		.antMatchers("/auth/login/**", "/auth/register/**", "/api-docs/***","/swagger-ui/**","/","/api-docs").permitAll()
-    		.antMatchers("/products/create").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-            .antMatchers("/categories/create").hasAuthority("ROLE_ADMIN")
+    		.antMatchers(HttpMethod.POST, "/products").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+            .antMatchers(HttpMethod.POST, "/categories").hasAuthority("ROLE_ADMIN")
     		.anyRequest().authenticated();
         http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //Add filters for JWT
     }

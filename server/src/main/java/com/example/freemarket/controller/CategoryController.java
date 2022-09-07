@@ -21,7 +21,7 @@ public class CategoryController {
     ICategoryService categoryService;
 
     @Operation(summary="Adds a new category for products.")
-    @PostMapping(path = "/create")
+    @PostMapping
     public ResponseEntity<Object> create(@RequestBody CategoryRequest categoryRequest) {
         Category newCategory = new Category(categoryRequest.getName());
         Category category = categoryService.create(newCategory);

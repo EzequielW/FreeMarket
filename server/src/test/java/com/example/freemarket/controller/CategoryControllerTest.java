@@ -45,7 +45,7 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
             .willReturn(category);
 
         String json = mapper.writeValueAsString(category);
-        mockMvc.perform(post("/categories/create")
+        mockMvc.perform(post("/categories")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
@@ -61,7 +61,7 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
             .willReturn(category);
 
         String json = mapper.writeValueAsString(category);
-        mockMvc.perform(post("/categories/create")
+        mockMvc.perform(post("/categories")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)

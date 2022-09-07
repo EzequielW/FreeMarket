@@ -32,7 +32,7 @@ public class ProductController {
     ICategoryService categoryService;
 
     @Operation(summary="Adds a new selling product for the logged user.")
-    @PostMapping(path = "/create")
+    @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductRequest productRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
         Category category = categoryService.getById(productRequest.getCategoryId());
