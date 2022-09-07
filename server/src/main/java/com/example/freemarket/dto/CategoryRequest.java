@@ -8,12 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-	
-	@Schema(description = "User email", example = "admin@email.com")
-    private String email;
-	
-	@Schema(description = "User password", example = "1234")
-    private String password;
-	
+public class CategoryRequest {
+    @Schema(description = "Category name", example = "Furniture")
+    private String name;
 }

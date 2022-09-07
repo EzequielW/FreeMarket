@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,8 +61,11 @@ public class User implements UserDetails{
     @ManyToOne
     private Role role;
 
-    @UpdateTimestamp
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
+	@UpdateTimestamp
+	private LocalDateTime updatedAt;
 
     @NotNull(message = "Deleted can not be empty.")
     private Boolean deleted = Boolean.FALSE;

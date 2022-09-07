@@ -1,7 +1,7 @@
 package com.example.freemarket.model;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,8 +44,11 @@ public class Product {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 	
-	@Column(name = "created_at")
-	private Timestamp createdAt;
+	@CreationTimestamp
+    private LocalDateTime createdAt;
+
+	@UpdateTimestamp
+	private LocalDateTime updatedAt;
 	
 	public Product(String name, BigDecimal price, User user, Category category){
 		this.name = name;

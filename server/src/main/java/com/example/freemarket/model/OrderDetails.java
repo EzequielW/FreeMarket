@@ -1,6 +1,7 @@
 package com.example.freemarket.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,6 +41,12 @@ public class OrderDetails {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_details_id", referencedColumnName = "id")
     private Set<OrderItem> orderItems;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+	@UpdateTimestamp
+	private LocalDateTime updatedAt;
 
     public OrderDetails(BigDecimal total, User user, Set<OrderItem> orderItems){
         this.total = total;

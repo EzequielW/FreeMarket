@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
     		.antMatchers("/auth/login/**", "/auth/register/**", "/api-docs/***","/swagger-ui/**","/","/api-docs").permitAll()
     		.antMatchers("/products/create").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+            .antMatchers("/categories/create").hasAuthority("ROLE_ADMIN")
     		.anyRequest().authenticated();
         http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //Add filters for JWT
     }

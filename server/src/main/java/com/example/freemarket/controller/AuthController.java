@@ -51,7 +51,7 @@ public class AuthController {
                 .header("Authorization", "Bearer " + jwt)
                 .body(userResponse);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password");
         }
     }
 
