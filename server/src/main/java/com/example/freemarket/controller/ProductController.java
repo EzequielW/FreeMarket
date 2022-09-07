@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.freemarket.dto.ProductRequest;
+import com.example.freemarket.model.Category;
 import com.example.freemarket.model.Product;
 import com.example.freemarket.model.User;
+import com.example.freemarket.service.ICategoryService;
 import com.example.freemarket.service.IProductService;
 import com.example.freemarket.service.IUserService;
 
@@ -26,11 +28,15 @@ public class ProductController {
     @Autowired
     IUserService userService;
 
+    @Autowired
+    ICategoryService categoryService;
+
     @Operation(summary="Adds a new selling product for the logged user.")
     @PostMapping(path = "/create")
     public ResponseEntity<Object> create(@RequestBody ProductRequest productRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
-        Product newProduct = new Product(productRequest.getName(), productRequest.getPrice(), user, productRequest.getCategory());
+        Category category = categoryService.getById(productRequest.getCategoryId());
+        Product newProduct = new Product(productRequest.getName(), productRequest.getPrice(), user, category);
         
         Product product = productService.create(newProduct);
 

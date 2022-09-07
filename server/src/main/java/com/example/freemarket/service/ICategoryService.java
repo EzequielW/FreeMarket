@@ -7,4 +7,5 @@ import com.example.freemarket.model.Category;
 @Service
 public interface ICategoryService {
     Category create(Category category);
+    Category getById(Long id);
 }

@@ -22,6 +22,7 @@ import com.example.freemarket.model.Category;
 import com.example.freemarket.model.Product;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
+import com.example.freemarket.service.ICategoryService;
 import com.example.freemarket.service.IProductService;
 import com.example.freemarket.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,19 +41,24 @@ public class ProductControllerTest extends SecurityEnabledSetup{
     @MockBean(name="userService")
     IUserService userService;
 
+    @MockBean
+    ICategoryService categoryService;
+
     @Test
     @WithMockUser(username = "jleanon@email.com", password = "1234", authorities = { "ROLE_USER" })
     void create_validProduct_returnOk() throws Exception {
         Role role = new Role("ROLE_USER");
         User user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
         Category category = new Category("CPU");
-        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), category);
+        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), 1L);
         Product product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user, category);
 
         given(userService.getByEmail("jleanon@email.com"))
             .willReturn(user);
         given(productService.create(product))
             .willReturn(product);
+        given(categoryService.getById(1L))
+            .willReturn(category);
 
         String json = mapper.writeValueAsString(productRequest);
         mockMvc.perform(post("/products/create")

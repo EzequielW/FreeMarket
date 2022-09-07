@@ -2,8 +2,6 @@ package com.example.freemarket.dto;
 
 import java.math.BigDecimal;
 
-import com.example.freemarket.model.Category;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +17,6 @@ public class ProductRequest {
 	@Schema(description = "Product price", example = "230")
     private BigDecimal price;
 
-    @Schema(description = "Category this product belongs to", example = "230")
-    private Category category;
+    @Schema(description = "Category this product belongs to", example = "1")
+    private Long categoryId;
 }
