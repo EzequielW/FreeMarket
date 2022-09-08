@@ -24,7 +24,6 @@ import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
 import com.example.freemarket.service.ICategoryService;
 import com.example.freemarket.service.IProductService;
-import com.example.freemarket.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(controllers = ProductController.class)
@@ -37,9 +36,6 @@ public class ProductControllerTest extends SecurityEnabledSetup{
 
     @MockBean(name="productService")
     IProductService productService;
-
-    @MockBean(name="userService")
-    IUserService userService;
 
     @MockBean
     ICategoryService categoryService;

@@ -7,4 +7,5 @@ import com.example.freemarket.model.Product;
 @Service
 public interface IProductService {
     Product create(Product product);
+    Product getById(Long id);
 }

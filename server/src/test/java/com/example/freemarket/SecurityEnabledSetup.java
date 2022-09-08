@@ -11,7 +11,7 @@ import com.example.freemarket.util.JwtUtil;
 @Import(WebSecurityConfig.class)
 public abstract class SecurityEnabledSetup {
     @MockBean
-    private UserService userService;
+    protected UserService userService;
 
     @MockBean
     protected BCryptPasswordEncoder bCryptPasswordEncoder;

@@ -26,7 +26,6 @@ import com.example.freemarket.dto.RegistrationRequest;
 import com.example.freemarket.dto.UserResponse;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.service.IAuthService;
-import com.example.freemarket.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(controllers = AuthController.class)
@@ -39,9 +38,6 @@ public class AuthControllerTest extends SecurityEnabledSetup {
 
     @MockBean(name="authService")
     IAuthService authService;
-
-    @MockBean(name="userService")
-    IUserService userService;
 
     @Test
     void registerUser_validUser_returnOk() throws Exception {
