@@ -35,7 +35,7 @@ public class Product {
 	private Long id;
 	
 	@NotEmpty(message = "Product name cant be empty")
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 120)
 	private String name;
 	
 	@Digits(integer = 6, fraction = 2)
