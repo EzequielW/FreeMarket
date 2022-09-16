@@ -1,5 +1,7 @@
 package com.example.freemarket.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import com.example.freemarket.service.IUserService;
 import com.example.freemarket.util.FileStorageUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping(path = "/products")
@@ -35,7 +38,7 @@ public class ProductController {
     @Autowired
     FileStorageUtil fileStorageUtil;
 
-    @Operation(summary="Adds a new selling product for the logged user.")
+    @Operation(summary="Adds a new selling product for the logged user")
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Object> create(@ModelAttribute ProductRequest productRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
@@ -62,4 +65,13 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Request");
         }
     }
+
+    @Operation(summary="Gets all products")
+    @GetMapping
+    public ResponseEntity<Object> getAll() {
+        List<Product> products = productService.getAll();
+
+        return ResponseEntity.ok(products);
+    }
+    
 }

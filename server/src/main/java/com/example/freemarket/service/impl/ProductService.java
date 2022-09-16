@@ -1,5 +1,6 @@
 package com.example.freemarket.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,12 @@ public class ProductService implements IProductService{
         }
         
         return product;
+    }
+
+    @Override
+    public List<Product> getAll() {
+        List<Product> products = productRepository.findAll();
+
+        return products;
     }
 }

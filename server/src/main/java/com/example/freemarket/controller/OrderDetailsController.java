@@ -36,7 +36,7 @@ public class OrderDetailsController {
     @Autowired
     IProductService productService;
 
-    @Operation(summary="Creates a new order of products for a user.")
+    @Operation(summary="Creates a new order of products for a user")
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody OrderDetailsRequest orderDetailsRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());

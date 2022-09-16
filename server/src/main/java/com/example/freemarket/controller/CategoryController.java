@@ -20,7 +20,7 @@ public class CategoryController {
     @Autowired
     ICategoryService categoryService;
 
-    @Operation(summary="Adds a new category for products.")
+    @Operation(summary="Adds a new category for products")
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody CategoryRequest categoryRequest) {
         Category newCategory = new Category(categoryRequest.getName());

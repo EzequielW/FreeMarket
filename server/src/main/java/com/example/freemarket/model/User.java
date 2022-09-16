@@ -26,6 +26,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -59,6 +60,7 @@ public class User implements UserDetails{
     private String email;
 
     @NotNull(message = "Password cant be null.")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @JoinColumn(name = "role", referencedColumnName = "id")

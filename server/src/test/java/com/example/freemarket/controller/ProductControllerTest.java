@@ -1,13 +1,17 @@
 package com.example.freemarket.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.mockito.BDDMockito.given;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,17 +44,29 @@ public class ProductControllerTest extends SecurityEnabledSetup{
     @MockBean
     FileStorageUtil fileStorageUtil;
 
+    User user;
+    Category category;
+    MockMultipartFile file;
+    ProductRequest productRequest;
+    Product product;
+    List<Product> products;
+
+    @BeforeEach
+    void setUp(){
+        Role role = new Role("ROLE_USER");
+        user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
+        category = new Category("CPU");
+        file = new MockMultipartFile("product", "product.jpg", "image/jpeg", "null".getBytes());
+        productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), 1L, file);
+        product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user, category);
+        product.setImagePath("/products/product.jpg");
+        products = new ArrayList<>();
+        products.add(product);
+    }
+
     @Test
     @WithMockUser(username = "jleanon@email.com", password = "1234", authorities = { "ROLE_USER" })
     void create_validProduct_returnOk() throws Exception {
-        Role role = new Role("ROLE_USER");
-        User user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
-        Category category = new Category("CPU");
-        MockMultipartFile file = new MockMultipartFile("product", "product.jpg", "image/jpeg", "null".getBytes());
-        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), 1L, file);
-        Product product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user, category);
-        product.setImagePath("/products/product.jpg");
-
         given(userService.getByEmail("jleanon@email.com"))
             .willReturn(user);
         given(productService.create(product))
@@ -64,6 +80,17 @@ public class ProductControllerTest extends SecurityEnabledSetup{
                 .contentType("multipart/form-data")
                 .flashAttr("productRequest", productRequest)
             )
+            .andDo(print())
+            .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    @WithMockUser(username = "jleanon@email.com", password = "1234", authorities = { "ROLE_USER" })
+    void getAll_validRequest_returnOk() throws Exception {
+        given(productService.getAll())
+            .willReturn(products);
+
+        mockMvc.perform(get("/products"))
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
     }

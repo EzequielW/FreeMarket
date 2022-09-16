@@ -1,8 +1,11 @@
 package com.example.freemarket.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +43,7 @@ public class ProductServiceTest{
     User user;
     Role role;
     Category category;
+    List<Product> products;
 
     @BeforeEach
     void setUp(){
@@ -47,10 +51,20 @@ public class ProductServiceTest{
         user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
         category = new Category("CPU");
         newProduct = new Product("CPU AMD 5600x", BigDecimal.valueOf(230), user, category);
+        products = new ArrayList<>();
+        products.add(newProduct);
     }
 
     @Test
     void create_validProduct_returnProduct(){
         assertEquals(newProduct, productService.create(newProduct));
+    }
+
+    @Test
+    void getAll_validRequest_returnList(){
+        given(productRepository.findAll())
+            .willReturn(products);
+
+        assertEquals(products, productService.getAll());
     }
 }
