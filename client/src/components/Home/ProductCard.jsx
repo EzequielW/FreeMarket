@@ -6,8 +6,8 @@ const ProductCard = ({product}) => {
         <Card sx={{ display: 'flex' }}>
             <CardMedia
                 component="img"
-                sx={{ maxWidth: 200, p: 1 }}
-                image="https://via.placeholder.com/150"
+                sx={{ width: 200, height: 200, p: 1 }}
+                image={`${process.env.REACT_APP_SERVER_URL}public${product.imagePath}`}
                 alt="Product image"
             />
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>

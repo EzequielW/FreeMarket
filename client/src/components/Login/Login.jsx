@@ -30,11 +30,12 @@ const Login = () => {
         try{
             const response = await authService.login(credentials);
             const data = response.data;
-            console.log(data);
+            const token = response.headers.authorization;
+            
             sessionStorage.setItem('id', data.id);
             sessionStorage.setItem('name', data.name);
             sessionStorage.setItem('role', data.role);
-            sessionStorage.setItem('token', 'Bearer ' + data.token);
+            sessionStorage.setItem('token', token ? token : '');
 
             navigate('/');
         } catch(err){

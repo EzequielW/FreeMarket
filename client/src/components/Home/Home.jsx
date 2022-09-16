@@ -1,39 +1,25 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Grid, Box, Paper, 
     Checkbox, FormControlLabel } from '@mui/material';
 
 import ProductCard from './ProductCard';
+import productsService from '../../services/productsService';
 
-const Home = () => {
-    const products = [
-        {
-            id: 1,
-            name: "AMD 5600x 4.5Ghz",
-            price: "1200",
-            category: {
-                id: 1,
-                name: "CPU"
-            }
-        },
-        {
-            id: 2,
-            name: "INTEL i7 7700K 5.0Ghz",
-            price: "999.99",
-            category: {
-                id: 1,
-                name: "CPU"
-            }
-        },
-        {
-            id: 3,
-            name: "GIGABYTE GeForce RTX 3060 Eagle OC 12G (REV2.0) Graphics Card, 2X WINDFORCE Fans, 12GB 192-bit GDDR6, GV-N3060EAGLE OC-12GD REV2.0 Video Card",
-            price: "499.99",
-            category: {
-                id: 2,
-                name: "GPU"
+const Home = ({user}) => {
+    const [products, setProducts] = useState([]);
+
+    useEffect((token = user.token) => {
+        const loadData = async () => {
+            try{
+                const response = await productsService.getAll(token);
+                console.log(response.data);
+                setProducts(response.data);
+            } catch(err){
+                console.log(err);
             }
         }
-    ]
+        loadData();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div>
