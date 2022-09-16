@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +16,7 @@ import com.example.freemarket.model.User;
 import com.example.freemarket.service.ICategoryService;
 import com.example.freemarket.service.IProductService;
 import com.example.freemarket.service.IUserService;
+import com.example.freemarket.util.FileStorageUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -31,14 +32,29 @@ public class ProductController {
     @Autowired
     ICategoryService categoryService;
 
+    @Autowired
+    FileStorageUtil fileStorageUtil;
+
     @Operation(summary="Adds a new selling product for the logged user.")
-    @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProductRequest productRequest, Authentication authentication) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Object> create(@ModelAttribute ProductRequest productRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
         Category category = categoryService.getById(productRequest.getCategoryId());
         Product newProduct = new Product(productRequest.getName(), productRequest.getPrice(), user, category);
         
-        Product product = productService.create(newProduct);
+        Product product = null;
+        try{
+            String imagePath = fileStorageUtil.writeToFile(
+                productRequest.getFile().getBytes(), 
+                productRequest.getFile().getOriginalFilename());
+            newProduct.setImagePath(imagePath);
+
+            product = productService.create(newProduct);
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
 
         if(product != null){
             return ResponseEntity.ok(product);

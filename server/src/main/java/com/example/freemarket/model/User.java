@@ -25,17 +25,21 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "user")
 @SQLDelete(sql = "UPDATE users SET deleted=true WHERE id = ?")
 @Where(clause = "deleted = false")
 @NoArgsConstructor
-@EqualsAndHashCode
 @Data
+@EqualsAndHashCode(exclude="products")
+@ToString(exclude="products")
 public class User implements UserDetails{
 	private static final long serialVersionUID = 1L;
 
@@ -72,6 +76,7 @@ public class User implements UserDetails{
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+	@JsonIgnore
     private Set<Product> products;
 
 	@Override

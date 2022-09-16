@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,15 +24,12 @@ import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
 import com.example.freemarket.service.ICategoryService;
 import com.example.freemarket.service.IProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.freemarket.util.FileStorageUtil;
 
 @WebMvcTest(controllers = ProductController.class)
 public class ProductControllerTest extends SecurityEnabledSetup{
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper mapper;
 
     @MockBean(name="productService")
     IProductService productService;
@@ -40,14 +37,19 @@ public class ProductControllerTest extends SecurityEnabledSetup{
     @MockBean
     ICategoryService categoryService;
 
+    @MockBean
+    FileStorageUtil fileStorageUtil;
+
     @Test
     @WithMockUser(username = "jleanon@email.com", password = "1234", authorities = { "ROLE_USER" })
     void create_validProduct_returnOk() throws Exception {
         Role role = new Role("ROLE_USER");
         User user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
         Category category = new Category("CPU");
-        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), 1L);
+        MockMultipartFile file = new MockMultipartFile("product", "product.jpg", "image/jpeg", "null".getBytes());
+        ProductRequest productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), 1L, file);
         Product product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user, category);
+        product.setImagePath("/products/product.jpg");
 
         given(userService.getByEmail("jleanon@email.com"))
             .willReturn(user);
@@ -55,12 +57,12 @@ public class ProductControllerTest extends SecurityEnabledSetup{
             .willReturn(product);
         given(categoryService.getById(1L))
             .willReturn(category);
+        given(fileStorageUtil.writeToFile(file.getBytes(), file.getOriginalFilename()))
+            .willReturn("/products/product.jpg");
 
-        String json = mapper.writeValueAsString(productRequest);
         mockMvc.perform(post("/products")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
+                .contentType("multipart/form-data")
+                .flashAttr("productRequest", productRequest)
             )
             .andDo(print())
             .andExpect(status().is2xxSuccessful());

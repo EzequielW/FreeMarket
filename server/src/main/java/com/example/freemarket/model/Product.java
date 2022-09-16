@@ -12,18 +12,23 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "product")
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(exclude="user")
+@ToString(exclude="user")
 public class Product {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +38,12 @@ public class Product {
 	@Column(nullable = false, length = 50)
 	private String name;
 	
-    @NotEmpty(message = "Product price cant be empty")
+	@Digits(integer = 6, fraction = 2)
     private BigDecimal price;
+
+	@NotEmpty(message = "Product image path cant be empty")
+	@Column(nullable = false)
+	private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

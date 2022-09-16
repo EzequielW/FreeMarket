@@ -18,13 +18,19 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "category")
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(exclude="products")
+@ToString(exclude="products")
 public class Category {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +42,7 @@ public class Category {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+	@JsonIgnore
     private Set<Product> products;
 	
 	@CreationTimestamp

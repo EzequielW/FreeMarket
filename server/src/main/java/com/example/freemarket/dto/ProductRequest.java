@@ -2,6 +2,8 @@ package com.example.freemarket.dto;
 
 import java.math.BigDecimal;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
+public class ProductRequest{
 	@Schema(description = "Product name", example = "AMD CPU 5600X")
     private String name;
 	
@@ -19,4 +21,6 @@ public class ProductRequest {
 
     @Schema(description = "Category this product belongs to", example = "1")
     private Long categoryId;
+
+    private MultipartFile file;
 }
