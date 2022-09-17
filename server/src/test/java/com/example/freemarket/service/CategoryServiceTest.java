@@ -1,6 +1,10 @@
 package com.example.freemarket.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +41,7 @@ public class CategoryServiceTest{
     Role adminRole;
     Role userRole;
     Category category;
+    List<Category> categories;
 
     @BeforeEach
     void setUp(){
@@ -44,10 +49,19 @@ public class CategoryServiceTest{
         userRole = new Role("ROLE_USER");
         user = new User("John", "Leanon", "jleanon@email.com", "1234", userRole);
         category = new Category("Furniture");
+        categories = new ArrayList<>();
     }
 
     @Test
     void create_validCategory_returnCategory(){
         assertEquals(category, categoryService.create(category));
+    }
+
+    @Test
+    void getAll_validRequest_returnList(){
+        given(categoryRepository.findAll())
+            .willReturn(categories);
+
+        assertEquals(categories, categoryService.getAll());
     }
 }

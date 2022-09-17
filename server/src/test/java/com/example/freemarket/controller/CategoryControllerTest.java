@@ -1,7 +1,11 @@
 package com.example.freemarket.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.mockito.BDDMockito.given;
@@ -32,10 +36,13 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
     ICategoryService categoryService;
 
     Category category;
+    List<Category> categories;
 
     @BeforeEach
     void setUp(){
         category = new Category("Furniture");
+        categories = new ArrayList<>();
+        categories.add(category);
     }
 
     @Test
@@ -68,5 +75,16 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
             )
             .andDo(print())
             .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(username = "jleanon@email.com", password = "1234", authorities = { "ROLE_USER" })
+    void getAll_validRequest_returnOk() throws Exception {
+        given(categoryService.getAll())
+            .willReturn(categories);
+
+        mockMvc.perform(get("/categories"))
+            .andDo(print())
+            .andExpect(status().is2xxSuccessful());
     }
 }
