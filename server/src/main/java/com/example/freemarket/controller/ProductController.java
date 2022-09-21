@@ -2,6 +2,8 @@ package com.example.freemarket.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +42,7 @@ public class ProductController {
 
     @Operation(summary="Adds a new selling product for the logged user")
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Object> create(@ModelAttribute ProductRequest productRequest, Authentication authentication) {
+    public ResponseEntity<Object> create(@ModelAttribute @Valid ProductRequest productRequest, Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
         Category category = categoryService.getById(productRequest.getCategoryId());
         Product newProduct = new Product(productRequest.getName(), productRequest.getPrice(), user, category);

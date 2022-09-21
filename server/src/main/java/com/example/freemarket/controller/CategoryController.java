@@ -2,6 +2,8 @@ package com.example.freemarket.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class CategoryController {
 
     @Operation(summary="Adds a new category for products")
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<Object> create(@RequestBody @Valid CategoryRequest categoryRequest) {
         Category newCategory = new Category(categoryRequest.getName());
         Category category = categoryService.create(newCategory);
 

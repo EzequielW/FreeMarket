@@ -57,8 +57,8 @@ public class ProductControllerTest extends SecurityEnabledSetup{
         user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
         category = new Category("CPU");
         file = new MockMultipartFile("product", "product.jpg", "image/jpeg", "null".getBytes());
-        productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230), 1L, file);
-        product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230), user, category);
+        productRequest = new ProductRequest("CPU AMD 5600X", BigDecimal.valueOf(230.20), 1L, file);
+        product = new Product("CPU AMD 5600X", BigDecimal.valueOf(230.20), user, category);
         product.setImagePath("/products/product.jpg");
         products = new ArrayList<>();
         products.add(product);

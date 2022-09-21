@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box, Paper, 
-    Checkbox, FormControlLabel } from '@mui/material';
+    Checkbox, FormControlLabel, Typography, Button } from '@mui/material';
+import { Search } from '@mui/icons-material';
 
 import ProductCard from './ProductCard';
 import productsService from '../../services/productsService';
@@ -9,6 +10,20 @@ import categoriesService from '../../services/categoriesService';
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+
+    const updateCategory = (category) => {
+        let tempCategories = categories;
+        
+        tempCategories = tempCategories.map(c => {
+            if(c.id === category.id){
+                return category;
+            } else{
+                return c;
+            }
+        });
+
+        setCategories(tempCategories);
+    }
 
     useEffect((token = user.token) => {
         const loadData = async () => {
@@ -21,7 +36,11 @@ const Home = ({user}) => {
 
             try{
                 const response = await categoriesService.getAll(token);
-                setCategories(response.data);
+                let resCategories = response.data;
+                resCategories = resCategories.map(c => {
+                    return { ...c, filter: false };
+                });
+                setCategories(resCategories);
             } catch(err){
                 console.log(err);
             }
@@ -35,13 +54,18 @@ const Home = ({user}) => {
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
                         <Paper sx={{ p: 4 }}>
+                            <Typography variant="h5" sx={{ pb: 2 }}>Categories</Typography>
                             {
                                 categories.map(c => {
                                     return (
-                                        <Box sx={{ display: 'flex' }}>
+                                        <Box sx={{ display: 'flex' }} key={c.id}>
                                             <FormControlLabel
                                                 control={
-                                                <Checkbox checked={false} onChange={() => {}} name={c.name} />
+                                                <Checkbox checked={c.filter} onChange={() => {
+                                                    const cat = c;
+                                                    cat.filter = !cat.filter;
+                                                    updateCategory(cat);
+                                                }} name={c.name} />
                                                 }
                                                 label={c.name}
                                             />
@@ -49,6 +73,7 @@ const Home = ({user}) => {
                                     );
                                 })
                             }
+                            <Button variant='contained' endIcon={<Search />} sx={{ mt: 2 }} fullWidth>Search</Button>
                         </Paper>
                     </Grid>
                     <Grid item xs={8}>
