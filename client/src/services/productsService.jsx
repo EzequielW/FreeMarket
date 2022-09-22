@@ -10,8 +10,17 @@ const getAll = async (token) => {
     });
 }
 
+const getByCategoryId = async (token, categoryId) => {
+    return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}?categoryId=${categoryId}`, {
+        headers: {
+            Authorization: token
+        }
+    });
+}
+
 const productsService = {
-    getAll
+    getAll,
+    getByCategoryId
 }
 
 export default productsService;

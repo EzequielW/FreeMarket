@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.freemarket.dto.ProductRequest;
@@ -70,8 +71,14 @@ public class ProductController {
 
     @Operation(summary="Gets all products")
     @GetMapping
-    public ResponseEntity<Object> getAll() {
-        List<Product> products = productService.getAll();
+    public ResponseEntity<Object> getAll(@RequestParam(required = false) Long categoryId) {
+        List<Product> products;
+
+        if(categoryId != null){
+            products = productService.getByCategoryId(categoryId);
+        } else{
+            products = productService.getAll();
+        }
 
         return ResponseEntity.ok(products);
     }

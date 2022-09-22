@@ -39,32 +39,46 @@ public class ProductServiceTest{
     @MockBean
     ProductRepository productRepository;
 
-    Product newProduct;
+    Product product1;
+    Product product2;
     User user;
     Role role;
-    Category category;
     List<Product> products;
 
     @BeforeEach
     void setUp(){
         role = new Role("ROLE_USER");
         user = new User("John", "Leanon", "jleanon@email.com", "1234", role);
-        category = new Category("CPU");
-        newProduct = new Product("CPU AMD 5600x", BigDecimal.valueOf(230), user, category);
+        Category category1 = new Category("CPU");
+        Category category2 = new Category("GPU");
+        product1 = new Product("CPU AMD 5600x", BigDecimal.valueOf(230), user, category1);
+        product2 = new Product("GPU NVIDIA RTX 3060", BigDecimal.valueOf(230), user, category2);
         products = new ArrayList<>();
-        products.add(newProduct);
     }
 
     @Test
     void create_validProduct_returnProduct(){
-        assertEquals(newProduct, productService.create(newProduct));
+        assertEquals(product1, productService.create(product1));
     }
 
     @Test
     void getAll_validRequest_returnList(){
+        products.add(product1);
+        products.add(product2);
+
         given(productRepository.findAll())
             .willReturn(products);
 
         assertEquals(products, productService.getAll());
+    }
+
+    @Test
+    void getByCategoryId_validRequest_returnList(){
+        products.add(product1);
+
+        given(productRepository.findByCategoryId(1L))
+            .willReturn(products);
+
+        assertEquals(products, productService.getByCategoryId(1L));
     }
 }

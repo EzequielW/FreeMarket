@@ -11,4 +11,5 @@ public interface IProductService {
     Product create(Product product);
     Product getById(Long id);
     List<Product> getAll();
+    List<Product> getByCategoryId(Long categoryId);
 }
