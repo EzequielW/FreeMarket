@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box, Paper, FormControl, RadioGroup, Radio, 
-    FormControlLabel, Typography, Button } from '@mui/material';
-import { Search } from '@mui/icons-material';
+    FormControlLabel, Typography, Button, CardMedia, Fab, Badge } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Search, AddCircle, RemoveCircle, ShoppingCart } from '@mui/icons-material';
 
 import ProductCard from './ProductCard';
 import productsService from '../../services/productsService';
@@ -11,6 +12,34 @@ const Home = ({user}) => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState({ id: 0, name: "All"});
+    const orderDetails = [
+        {
+            id: 1,
+            product: {
+                name: "GIGABYTE GeForce RTX 3060 Vision OC 12G (REV2.0) Graphics Card, 3X WINDFORCE Fans, 12GB 192-bit",
+                imagePath: "/products/825cc962-634f-49da-bed2-088827502469.png",
+                price: 379.99
+            },
+            quantity: 1
+        },
+        {
+            id: 2,
+            product: {
+                name: "AMD Ryzen 5 5600X 6 cores and 12 threads unlocked desktop processor with Wraith Stealth Cooler",
+                imagePath: "/products/f572102c-c546-4393-80a8-cde6699bbd2a.png",
+                price: 194
+            },
+            quantity: 2
+        }
+    ]
+
+    const StyledBadge = styled(Badge)(({ theme }) => ({
+        '& .MuiBadge-badge': {
+          right: -3,
+          top: 13,
+          padding: '0 4px',
+        },
+      }));
 
     const searchProducts = async () => {
         if(selectedCategory.id === 0){
@@ -95,8 +124,63 @@ const Home = ({user}) => {
                                 );
                             })
                         }
+                        <Box sx={{ p: 4 }}>
+                            {   
+                                orderDetails.map(oi => {
+                                    return (
+                                        <Box key={oi.id}>
+                                            <Box sx={{ display: 'flex' }}>
+                                                <CardMedia
+                                                    component="img"
+                                                    sx={{ width: 100, height: 100, p: 1 }}
+                                                    image={`${process.env.REACT_APP_SERVER_URL}public${oi.product.imagePath}`}
+                                                    alt="Product image"
+                                                />
+                                                <Box>
+                                                    <Typography sx={{ 
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        display: "-webkit-box",
+                                                        WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: "vertical",
+                                                        mr: 10
+                                                    }}>
+                                                        {oi.product.name}
+                                                    </Typography>
+                                                </Box>
+                                                <Typography>
+                                                    {'$' + oi.product.price * oi.quantity}
+                                                </Typography>
+                                            </Box>
+                                            <Box sx={{ display: 'flex' }}>
+                                                <Typography sx={{ pr: 2 }}>Item quantity</Typography>
+                                                <AddCircle />
+                                                <Typography sx={{ px: 1 }}>
+                                                    {oi.quantity}
+                                                </Typography>
+                                                <RemoveCircle />
+                                            </Box>
+                                        </Box>
+                                    );
+                                })
+                            }
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <Typography>
+                                    Total
+                                </Typography>
+                                <Typography>
+                                    ${ orderDetails.reduce((prev, oi) => prev + (oi.product.price * oi.quantity), 0) }
+                                </Typography>
+                            </Box>
+                            <Button variant='contained' fullWidth>Checkout</Button>
+                        </Box>
                     </Grid>
                 </Grid>
+                <Fab color="primary" aria-label="shopping-cart" sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+                    <StyledBadge badgeContent={orderDetails.length} color="secondary">
+                        <ShoppingCart />
+                    </StyledBadge>
+                </Fab>
             </Container>
         </div>
     );
