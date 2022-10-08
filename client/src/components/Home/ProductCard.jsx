@@ -2,7 +2,32 @@ import React from 'react';
 import { Card, CardMedia, Box, CardContent, Typography, Button } from '@mui/material';
 import { AddShoppingCart } from '@mui/icons-material';
 
-const ProductCard = ({product}) => {
+import orderItemsService from '../../services/orderItemsService';
+
+const ProductCard = ({product, orderItems, token, updateCart}) => {
+    const addToCart = async () => {
+        try{
+            const newOrderItem = {
+                productId: product.id,
+                quantity: 1
+            }
+
+            const orderItem = orderItems.find(oi => oi.id === product.id);
+
+            if(orderItem){
+                newOrderItem.quantity += orderItem.quantity;
+                newOrderItem.id = orderItem.id;
+                await orderItemsService.update(token, newOrderItem);
+            }
+            else{
+                await orderItemsService.create(token, newOrderItem);
+            }
+            updateCart();
+        } catch(err){
+            console.log(err);
+        }
+    }
+
     return (
         <Card sx={{ display: 'flex' }}>
             <CardMedia
@@ -28,7 +53,7 @@ const ProductCard = ({product}) => {
                         ${ product ? product.price : "00.00" }
                     </Typography>
                 </Box>
-                <Button variant='contained' startIcon={<AddShoppingCart />} sx={{ alignSelf: 'flex-start'}}>Add to cart</Button>
+                <Button variant='contained' startIcon={<AddShoppingCart />} sx={{ alignSelf: 'flex-start'}} onClick={addToCart}>Add to cart</Button>
             </CardContent>
         </Card>
     );

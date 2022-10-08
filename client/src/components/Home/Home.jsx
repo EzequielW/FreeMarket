@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Grid, Box, Paper, FormControl, RadioGroup, Radio, 
+import { Container, Grid, Box, Paper, FormControl, RadioGroup, Radio,
     FormControlLabel, Typography, Button, CardMedia, Fab, Badge, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Search, AddCircle, RemoveCircle, ShoppingCart } from '@mui/icons-material';
@@ -8,6 +8,7 @@ import ProductCard from './ProductCard';
 import productsService from '../../services/productsService';
 import categoriesService from '../../services/categoriesService';
 import orderDetailsService from '../../services/orderDetailsService';
+import orderItemsService from '../../services/orderItemsService';
 
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
@@ -21,7 +22,7 @@ const Home = ({user}) => {
           top: 13,
           padding: '0 4px',
         },
-      }));
+    }));
 
     const searchProducts = async () => {
         if(selectedCategory.id === 0){
@@ -46,6 +47,32 @@ const Home = ({user}) => {
         try{
             const response = await orderDetailsService.getActive(user.token);
             setOrderDetails(response.data);
+        } catch(err){
+            console.log(err);
+        }
+    }
+
+    const updateOrderItem = async (orderItem, newQuantity) => {
+        try{
+            const updatedOrderItem = {
+                id: orderItem.id,
+                productId: orderItem.product.id,
+                quantity: newQuantity
+            };
+
+            const response = await orderItemsService.update(user.token, updatedOrderItem);
+            console.log(response.data);
+            await getOrderDetails();
+        } catch(err){
+            console.log(err);
+        }
+    }
+
+    const removeOrderItem = async (orderItem) => {
+        try{
+            const response = await orderItemsService.deleteOne(user.token, orderItem.id);
+            console.log(response.data);
+            await getOrderDetails();
         } catch(err){
             console.log(err);
         }
@@ -113,7 +140,7 @@ const Home = ({user}) => {
                         {
                             products.map(p => {
                                 return (
-                                    <Box key={p.id} sx={{ mb: 2 }}><ProductCard product={p}/></Box>
+                                    <Box key={p.id} sx={{ mb: 2 }}><ProductCard product={p} orderItems={orderDetails.orderItems} token={user.token} updateCart={getOrderDetails} /></Box>
                                 );
                             })
                         }
@@ -148,11 +175,20 @@ const Home = ({user}) => {
                                             </Box>
                                             <Box sx={{ display: 'flex' }}>
                                                 <Typography sx={{ pr: 2 }}>Item quantity</Typography>
-                                                <AddCircle />
+                                                <AddCircle color="primary" sx={{ cursor: "pointer" }}
+                                                    onClick={() => updateOrderItem(oi, oi.quantity + 1) } />
                                                 <Typography sx={{ px: 1 }}>
                                                     {oi.quantity}
                                                 </Typography>
-                                                <RemoveCircle />
+                                                <RemoveCircle color="primary" sx={{ cursor: "pointer" }} 
+                                                    onClick={() => {
+                                                        if(oi.quantity === 1){
+                                                            removeOrderItem(oi);
+                                                        }
+                                                        else{
+                                                            updateOrderItem(oi, oi.quantity - 1);
+                                                        }
+                                                    }}/>
                                             </Box>
                                         </Box>
                                     );
@@ -166,7 +202,7 @@ const Home = ({user}) => {
                                 <Typography>
                                     ${ 
                                         orderDetails.orderItems ?
-                                        orderDetails.orderItems.reduce((prev, oi) => prev + (oi.product.price * oi.quantity), 0) 
+                                        orderDetails.orderItems.reduce((prev, oi) => prev + (oi.product.price * oi.quantity), 0).toFixed(2) 
                                         : "0"
                                     }
                                 </Typography>

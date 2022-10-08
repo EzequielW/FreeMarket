@@ -23,9 +23,22 @@ public class OrderItemService implements IOrderItemService{
     @Override
     public OrderItem create(User user, OrderItem orderItem) {
         OrderDetails orderDetails = orderDetailsService.getActive(user);
+        boolean validProduct = true;
 
-        orderItem.setOrderDetails(orderDetails);
-        orderItemRepository.save(orderItem);
+        for(OrderItem oi: orderDetails.getOrderItems()){
+            if(oi.getProduct().getId() == orderItem.getProduct().getId()){
+                validProduct = false;
+                break;
+            }
+        }
+
+        if(validProduct){
+            orderItem.setOrderDetails(orderDetails);
+            orderItemRepository.save(orderItem);
+        }
+        else{
+            orderItem = null;
+        }
 
         return orderItem;
     }
