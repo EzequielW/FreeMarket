@@ -1,37 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box, Paper, FormControl, RadioGroup, Radio, 
-    FormControlLabel, Typography, Button, CardMedia, Fab, Badge } from '@mui/material';
+    FormControlLabel, Typography, Button, CardMedia, Fab, Badge, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Search, AddCircle, RemoveCircle, ShoppingCart } from '@mui/icons-material';
 
 import ProductCard from './ProductCard';
 import productsService from '../../services/productsService';
 import categoriesService from '../../services/categoriesService';
+import orderDetailsService from '../../services/orderDetailsService';
 
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState({ id: 0, name: "All"});
-    const orderDetails = [
-        {
-            id: 1,
-            product: {
-                name: "GIGABYTE GeForce RTX 3060 Vision OC 12G (REV2.0) Graphics Card, 3X WINDFORCE Fans, 12GB 192-bit",
-                imagePath: "/products/825cc962-634f-49da-bed2-088827502469.png",
-                price: 379.99
-            },
-            quantity: 1
-        },
-        {
-            id: 2,
-            product: {
-                name: "AMD Ryzen 5 5600X 6 cores and 12 threads unlocked desktop processor with Wraith Stealth Cooler",
-                imagePath: "/products/f572102c-c546-4393-80a8-cde6699bbd2a.png",
-                price: 194
-            },
-            quantity: 2
-        }
-    ]
+    const [orderDetails, setOrderDetails] = useState({});
 
     const StyledBadge = styled(Badge)(({ theme }) => ({
         '& .MuiBadge-badge': {
@@ -60,6 +42,15 @@ const Home = ({user}) => {
         }
     }
 
+    const getOrderDetails = async () => {
+        try{
+            const response = await orderDetailsService.getActive(user.token);
+            setOrderDetails(response.data);
+        } catch(err){
+            console.log(err);
+        }
+    }
+
     useEffect((token = user.token) => {
         const loadData = async () => {
             try{
@@ -79,6 +70,8 @@ const Home = ({user}) => {
             } catch(err){
                 console.log(err);
             }
+
+            await getOrderDetails();
         }
         loadData();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -126,7 +119,8 @@ const Home = ({user}) => {
                         }
                         <Box sx={{ p: 4 }}>
                             {   
-                                orderDetails.map(oi => {
+                                orderDetails.orderItems ?
+                                orderDetails.orderItems.map(oi => {
                                     return (
                                         <Box key={oi.id}>
                                             <Box sx={{ display: 'flex' }}>
@@ -136,7 +130,7 @@ const Home = ({user}) => {
                                                     image={`${process.env.REACT_APP_SERVER_URL}public${oi.product.imagePath}`}
                                                     alt="Product image"
                                                 />
-                                                <Box>
+                                                <Box sx={{ width: "100%" }}>
                                                     <Typography sx={{ 
                                                         overflow: "hidden",
                                                         textOverflow: "ellipsis",
@@ -163,13 +157,18 @@ const Home = ({user}) => {
                                         </Box>
                                     );
                                 })
+                                : <CircularProgress />
                             }
                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <Typography>
                                     Total
                                 </Typography>
                                 <Typography>
-                                    ${ orderDetails.reduce((prev, oi) => prev + (oi.product.price * oi.quantity), 0) }
+                                    ${ 
+                                        orderDetails.orderItems ?
+                                        orderDetails.orderItems.reduce((prev, oi) => prev + (oi.product.price * oi.quantity), 0) 
+                                        : "0"
+                                    }
                                 </Typography>
                             </Box>
                             <Button variant='contained' fullWidth>Checkout</Button>

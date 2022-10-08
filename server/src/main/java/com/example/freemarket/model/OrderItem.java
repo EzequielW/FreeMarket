@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +26,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_details_id", referencedColumnName = "id")
+    @JsonBackReference
     private OrderDetails orderDetails;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -2,7 +2,7 @@ package com.example.freemarket.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,6 +18,8 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,7 +42,13 @@ public class OrderDetails {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_details_id", referencedColumnName = "id")
-    private Set<OrderItem> orderItems;
+    @JsonManagedReference
+    private List<OrderItem> orderItems;
+
+    // Set to true after been passing checkout
+    // an user can only have 1 order not checkout at a time
+    @NotNull
+    private boolean isConfirmed;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -48,7 +56,7 @@ public class OrderDetails {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 
-    public OrderDetails(BigDecimal total, User user, Set<OrderItem> orderItems){
+    public OrderDetails(BigDecimal total, User user, List<OrderItem> orderItems){
         this.total = total;
         this.user = user;
         this.orderItems = orderItems;

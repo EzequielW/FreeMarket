@@ -1,10 +1,12 @@
 package com.example.freemarket.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.freemarket.model.Category;
 import com.example.freemarket.model.OrderDetails;
 import com.example.freemarket.model.OrderItem;
-import com.example.freemarket.model.Product;
 import com.example.freemarket.model.Role;
 import com.example.freemarket.model.User;
 import com.example.freemarket.repository.OrderDetailsRepository;
@@ -48,22 +48,42 @@ public class OrderDetailsServiceTest {
     void setUp(){
         Role userRole = new Role("ROLE_USER");
         user = new User("John", "Leanon", "jleanon@email.com", "1234", userRole);
+        user.setId(1L);
         buyer = new User("Pool", "MCKart", "pmckart@email.com", "2345", userRole);
 
-        Category category = new Category("CPU");
-        Product product1 = new Product("NVIDIA 3090", BigDecimal.valueOf(2200), user, category);
-        Product product2 = new Product("YAMAHA P45", BigDecimal.valueOf(410), user, category);
-        OrderItem orderItem1 = new OrderItem(product1, 4);
-        OrderItem orderItem2 = new OrderItem(product2, 1);
+        // Category category = new Category("CPU");
+        // Product product1 = new Product("NVIDIA 3090", BigDecimal.valueOf(2200), user, category);
+        // Product product2 = new Product("YAMAHA P45", BigDecimal.valueOf(410), user, category);
+        // OrderItem orderItem1 = new OrderItem(product1, 4);
+        // OrderItem orderItem2 = new OrderItem(product2, 1);
 
-        Set<OrderItem> orderItems = new HashSet<>();
-        orderItems.add(orderItem1);
-        orderItems.add(orderItem2);
-        orderDetails = new OrderDetails(BigDecimal.valueOf(9210), buyer, orderItems);
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderDetails = new OrderDetails(BigDecimal.valueOf(0), buyer, orderItems);
     }
 
     @Test
-    void create_validaOrder_returnOrder(){
-        assertEquals(orderDetails, orderDetailsService.create(orderDetails));
+    void create_validUser_returnOrder(){
+        given(orderDetailsRepository.findAllByUserIdAndIsConfirmedFalse(user.getId()))
+            .willReturn(orderDetails);
+
+        assertEquals(orderDetails, orderDetailsService.create(user));
+    }
+
+    @Test
+    void getActive_orderActive_returnOrder(){
+        given(orderDetailsRepository.findAllByUserIdAndIsConfirmedFalse(user.getId()))
+            .willReturn(orderDetails);
+
+        assertEquals(orderDetails, orderDetailsService.getActive(user));
+    }
+
+    @Test
+    void getById_validId_returnOrder(){
+        orderDetails.setId(1L);
+        Optional<OrderDetails> optional = Optional.of(orderDetails);
+        given(orderDetailsRepository.findById(1L))
+            .willReturn(optional);
+
+        assertEquals(orderDetails, orderDetailsService.getById(1L));
     }
 }
