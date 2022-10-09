@@ -1,28 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box, Paper, FormControl, RadioGroup, Radio,
-    FormControlLabel, Typography, Button, CardMedia, Fab, Badge, CircularProgress } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Search, AddCircle, RemoveCircle, ShoppingCart } from '@mui/icons-material';
+    FormControlLabel, Typography, Button} from '@mui/material';
+import { Search} from '@mui/icons-material';
 
 import ProductCard from './ProductCard';
+import CartCard from './CartCard';
 import productsService from '../../services/productsService';
 import categoriesService from '../../services/categoriesService';
 import orderDetailsService from '../../services/orderDetailsService';
-import orderItemsService from '../../services/orderItemsService';
 
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState({ id: 0, name: "All"});
     const [orderDetails, setOrderDetails] = useState({});
-
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-          right: -3,
-          top: 13,
-          padding: '0 4px',
-        },
-    }));
 
     const searchProducts = async () => {
         if(selectedCategory.id === 0){
@@ -47,32 +38,6 @@ const Home = ({user}) => {
         try{
             const response = await orderDetailsService.getActive(user.token);
             setOrderDetails(response.data);
-        } catch(err){
-            console.log(err);
-        }
-    }
-
-    const updateOrderItem = async (orderItem, newQuantity) => {
-        try{
-            const updatedOrderItem = {
-                id: orderItem.id,
-                productId: orderItem.product.id,
-                quantity: newQuantity
-            };
-
-            const response = await orderItemsService.update(user.token, updatedOrderItem);
-            console.log(response.data);
-            await getOrderDetails();
-        } catch(err){
-            console.log(err);
-        }
-    }
-
-    const removeOrderItem = async (orderItem) => {
-        try{
-            const response = await orderItemsService.deleteOne(user.token, orderItem.id);
-            console.log(response.data);
-            await getOrderDetails();
         } catch(err){
             console.log(err);
         }
@@ -144,78 +109,9 @@ const Home = ({user}) => {
                                 );
                             })
                         }
-                        <Box sx={{ p: 4 }}>
-                            {   
-                                orderDetails.orderItems ?
-                                orderDetails.orderItems.map(oi => {
-                                    return (
-                                        <Box key={oi.id}>
-                                            <Box sx={{ display: 'flex' }}>
-                                                <CardMedia
-                                                    component="img"
-                                                    sx={{ width: 100, height: 100, p: 1 }}
-                                                    image={`${process.env.REACT_APP_SERVER_URL}public${oi.product.imagePath}`}
-                                                    alt="Product image"
-                                                />
-                                                <Box sx={{ width: "100%" }}>
-                                                    <Typography sx={{ 
-                                                        overflow: "hidden",
-                                                        textOverflow: "ellipsis",
-                                                        display: "-webkit-box",
-                                                        WebkitLineClamp: 2,
-                                                        WebkitBoxOrient: "vertical",
-                                                        mr: 10
-                                                    }}>
-                                                        {oi.product.name}
-                                                    </Typography>
-                                                </Box>
-                                                <Typography>
-                                                    {'$' + oi.product.price * oi.quantity}
-                                                </Typography>
-                                            </Box>
-                                            <Box sx={{ display: 'flex' }}>
-                                                <Typography sx={{ pr: 2 }}>Item quantity</Typography>
-                                                <AddCircle color="primary" sx={{ cursor: "pointer" }}
-                                                    onClick={() => updateOrderItem(oi, oi.quantity + 1) } />
-                                                <Typography sx={{ px: 1 }}>
-                                                    {oi.quantity}
-                                                </Typography>
-                                                <RemoveCircle color="primary" sx={{ cursor: "pointer" }} 
-                                                    onClick={() => {
-                                                        if(oi.quantity === 1){
-                                                            removeOrderItem(oi);
-                                                        }
-                                                        else{
-                                                            updateOrderItem(oi, oi.quantity - 1);
-                                                        }
-                                                    }}/>
-                                            </Box>
-                                        </Box>
-                                    );
-                                })
-                                : <CircularProgress />
-                            }
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <Typography>
-                                    Total
-                                </Typography>
-                                <Typography>
-                                    ${ 
-                                        orderDetails.orderItems ?
-                                        orderDetails.orderItems.reduce((prev, oi) => prev + (oi.product.price * oi.quantity), 0).toFixed(2) 
-                                        : "0"
-                                    }
-                                </Typography>
-                            </Box>
-                            <Button variant='contained' fullWidth>Checkout</Button>
-                        </Box>
                     </Grid>
                 </Grid>
-                <Fab color="primary" aria-label="shopping-cart" sx={{ position: 'fixed', bottom: 16, right: 16 }}>
-                    <StyledBadge badgeContent={orderDetails.length} color="secondary">
-                        <ShoppingCart />
-                    </StyledBadge>
-                </Fab>
+                <CartCard token={user.token} orderItems={orderDetails.orderItems} getOrderDetails={getOrderDetails} />
             </Container>
         </div>
     );
