@@ -10,8 +10,17 @@ const getActive = async (token) => {
     });
 }
 
+const checkout = async (token) => {
+    return await axios.post(`${process.env.REACT_APP_SERVER_URL}${basePath}/checkout`, {}, {
+        headers: {
+            Authorization: token
+        }
+    });
+}
+
 const orderDetailsService = {
-    getActive
+    getActive,
+    checkout
 }
 
 export default orderDetailsService;

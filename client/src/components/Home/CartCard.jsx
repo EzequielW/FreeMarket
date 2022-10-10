@@ -6,9 +6,14 @@ import { styled } from '@mui/material/styles';
 import { AddCircle, RemoveCircle, ShoppingCart } from '@mui/icons-material';
 
 import orderItemsService from '../../services/orderItemsService';
+import orderDetailsService from '../../services/orderDetailsService';
 
 const CartCard = ({token, orderItems, getOrderDetails}) => {
     const [showCart, setShowCart] = useState(false);
+
+    const mercadopago = new window.MercadoPago(process.env.REACT_APP_MP_PUBLIC_KEY, {
+        locale: 'es-AR'
+    });
 
     const StyledBadge = styled(Badge)(() => ({
         '& .MuiBadge-badge': {
@@ -44,8 +49,26 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
         }
     }
 
+    const checkoutOrder = async () => {
+        try{
+            const response = await orderDetailsService.checkout(token);
+            mercadopago.checkout({
+                preference: {
+                  id: response.data
+                },
+                render: {
+                  container: '.cho-container',
+                  label: 'Pagar',
+                }
+            });
+        } catch(err){
+            console.log(err);
+        }
+    }
+
     return (
         <div>
+            <div className="cho-container"></div>
             <Grow in={showCart}>
                 <Paper sx={{ position: 'fixed', bottom: 80, right: 16, width: "500px"}}>
                     <Box sx={{ p: 3, maxHeight: "500px", overflowY: "auto" }}>
@@ -116,7 +139,7 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
                             </Typography>
                         </Box>
                     </Box>
-                    <Button variant='contained' fullWidth>Checkout</Button>
+                    <Button variant='contained' fullWidth onClick={checkoutOrder}>Checkout</Button>
                 </Paper>
             </Grow>
             <Fab color="primary" aria-label="shopping-cart" sx={{ position: 'fixed', bottom: 16, right: 16 }} onClick={() => setShowCart(!showCart)}>
