@@ -55,7 +55,10 @@ const Home = ({user}) => {
                         }
                     </Grid>
                 </Grid>
-                <CartCard token={user.token} orderItems={orderDetails.orderItems} getOrderDetails={getOrderDetails} />
+                { // Show cart only if there are items already
+                    orderDetails && orderDetails.orderItems && orderDetails.orderItems.length > 0 &&
+                    <CartCard token={user.token} orderItems={orderDetails.orderItems} getOrderDetails={getOrderDetails} />
+                }
             </Container>
         </div>
     );
