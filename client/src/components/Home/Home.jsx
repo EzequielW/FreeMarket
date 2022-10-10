@@ -1,38 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Container, Grid, Box, Paper, FormControl, RadioGroup, Radio,
-    FormControlLabel, Typography, Button} from '@mui/material';
-import { Search} from '@mui/icons-material';
+import { Container, Grid, Box } from '@mui/material';
 
+import Header from '../Header/Header';
 import ProductCard from './ProductCard';
 import CartCard from './CartCard';
+import CategoryFilter from './CategoryFilter';
 import productsService from '../../services/productsService';
-import categoriesService from '../../services/categoriesService';
 import orderDetailsService from '../../services/orderDetailsService';
 
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState({ id: 0, name: "All"});
     const [orderDetails, setOrderDetails] = useState({});
-
-    const searchProducts = async () => {
-        if(selectedCategory.id === 0){
-            try{
-                const response = await productsService.getAll(user.token);
-                setProducts(response.data);
-            } catch(err){
-                console.log(err);
-            }
-        }
-        else{
-            try{
-                const response = await productsService.getByCategoryId(user.token, selectedCategory.id);
-                setProducts(response.data);
-            } catch(err){
-                console.log(err);
-            }
-        }
-    }
 
     const getOrderDetails = async () => {
         try{
@@ -52,17 +30,6 @@ const Home = ({user}) => {
                 console.log(err);
             }
 
-            try{
-                const response = await categoriesService.getAll(token);
-                let resCategories = response.data;
-                resCategories = resCategories.map(c => {
-                    return { ...c, filter: false };
-                });
-                setCategories(resCategories);
-            } catch(err){
-                console.log(err);
-            }
-
             await getOrderDetails();
         }
         loadData();
@@ -70,42 +37,19 @@ const Home = ({user}) => {
 
     return (
         <div>
+            <Header />
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <Paper sx={{ p: 4 }}>
-                            <Typography variant="h5" sx={{ pb: 2 }}>Categories</Typography>
-                            <FormControl>
-                                <RadioGroup
-                                    value={selectedCategory.id}
-                                    onChange={(e, value) => {
-                                        const id = value;
-                                        const newCategory = categories.find((c) => c.id === Number(id));
-                                        if(newCategory !== undefined){
-                                            setSelectedCategory(newCategory);
-                                        } else{
-                                            setSelectedCategory({ id: 0, name: "All"});
-                                        }
-                                    }}
-                                >
-                                    <FormControlLabel value={0} control={<Radio />} label={"All"}/>
-                                    {
-                                        categories.map(c => {
-                                            return (
-                                                <FormControlLabel value={c.id} control={<Radio />} label={c.name} key={c.id}/>
-                                            );
-                                        })
-                                    }
-                                </RadioGroup>
-                            </FormControl>
-                            <Button variant='contained' endIcon={<Search />} sx={{ mt: 2 }} fullWidth onClick={searchProducts}>Search</Button>
-                        </Paper>
+                        <CategoryFilter token={user.token} setProducts={setProducts} />
                     </Grid>
                     <Grid item xs={8}>
                         {
                             products.map(p => {
                                 return (
-                                    <Box key={p.id} sx={{ mb: 2 }}><ProductCard product={p} orderItems={orderDetails.orderItems} token={user.token} updateCart={getOrderDetails} /></Box>
+                                    <Box key={p.id} sx={{ mb: 2 }}>
+                                        <ProductCard product={p} orderItems={orderDetails.orderItems} token={user.token} updateCart={getOrderDetails} />
+                                    </Box>
                                 );
                             })
                         }
