@@ -94,9 +94,12 @@ public class OrderDetailsController {
             preferenceId = mpIntegrationService.checkoutRequest(user);
             return ResponseEntity.ok(preferenceId);
         } catch (MPException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not process request");
         } catch (MPApiException e) {
+            System.out.println("ERROR_CODE: " + e.getStatusCode());
+            System.out.println("API_RESPONSE: " + e.getApiResponse().getContent());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not process request");
         }

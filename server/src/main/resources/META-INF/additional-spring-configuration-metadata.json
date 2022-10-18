@@ -1,5 +1,27 @@
-{"properties": [{
-  "name": "spring.datasource.key",
-  "type": "java.lang.String",
-  "description": "A description for 'spring.datasource.key'"
-}]}
+{"properties": [
+  {
+    "name": "spring.datasource.key",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.key'"
+  },
+  {
+    "name": "spring.datasource.server-url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.server-url'"
+  },
+  {
+    "name": "spring.datasource.images-path",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.images-path'"
+  },
+  {
+    "name": "spring.datasource.mp-token",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.mp-token'"
+  },
+  {
+    "name": "spring.datasource.react-app-url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.react-app-url'"
+  }
+]}

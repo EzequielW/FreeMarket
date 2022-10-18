@@ -56,10 +56,7 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
                 preference: {
                   id: response.data
                 },
-                render: {
-                  container: '.cho-container',
-                  label: 'Pagar',
-                }
+                autoOpen: true
             });
         } catch(err){
             console.log(err);
@@ -68,7 +65,6 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
 
     return (
         <div>
-            <div className="cho-container"></div>
             <Grow in={showCart}>
                 <Paper sx={{ position: 'fixed', bottom: 80, right: 16, width: "500px"}}>
                     <Box sx={{ p: 3, maxHeight: "500px", overflowY: "auto" }}>
