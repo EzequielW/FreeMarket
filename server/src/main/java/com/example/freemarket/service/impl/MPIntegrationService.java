@@ -24,6 +24,8 @@ import com.mercadopago.resources.preference.Preference;
 public class MPIntegrationService implements IMPIntegrationService {
     @Value("${spring.datasource.react-app-url}")
 	private String REACT_APP_URL;
+    @Value("${spring.datasource.server-url}")
+    private String SERVER_URL;
 
     @Autowired
     OrderDetailsService orderDetailsService;
@@ -52,6 +54,7 @@ public class MPIntegrationService implements IMPIntegrationService {
         }
 
         String feedbackURL = REACT_APP_URL + "payments/feedback";
+        String notificationsURL = SERVER_URL + "payments/notifications";
         PreferenceRequest request = PreferenceRequest.builder()
             .items(items)
             .backUrls(
@@ -61,6 +64,7 @@ public class MPIntegrationService implements IMPIntegrationService {
                     .pending(feedbackURL + "/pending")
                     .build())
             .autoReturn("approved")
+            .notificationUrl(notificationsURL)
             .build();
 
         Preference preference = client.create(request, mpIntegrationConfig.getRequestOptions());
