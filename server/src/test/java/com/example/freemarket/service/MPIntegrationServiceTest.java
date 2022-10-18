@@ -70,6 +70,8 @@ public class MPIntegrationServiceTest {
         Category category = new Category("CPU");
         Product product1 = new Product("NVIDIA 3090", BigDecimal.valueOf(2199.99), user, category);
         Product product2 = new Product("YAMAHA P45", BigDecimal.valueOf(429.99), user, category);
+        product1.setId(1L);
+        product2.setId(2L);
         OrderItem orderItem1 = new OrderItem(product1, 4);
         OrderItem orderItem2 = new OrderItem(product2, 1);
 
