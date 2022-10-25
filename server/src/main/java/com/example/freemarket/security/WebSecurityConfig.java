@@ -37,7 +37,7 @@ public class WebSecurityConfig{
     	http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
     		.antMatchers("/auth/login/**", "/auth/register/**", "/api-docs/***",
-                "/swagger-ui/**","/","/api-docs", "/public/**").permitAll()
+                "/swagger-ui/**","/","/api-docs", "/public/**", "/notifications").permitAll()
     		.antMatchers(HttpMethod.POST, "/products").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
             .antMatchers(HttpMethod.POST, "/categories").hasAuthority("ROLE_ADMIN")
     		.anyRequest().authenticated();
