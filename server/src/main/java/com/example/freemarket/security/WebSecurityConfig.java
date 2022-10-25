@@ -2,6 +2,7 @@ package com.example.freemarket.security;
 
 import javax.servlet.Filter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,7 +32,7 @@ public class WebSecurityConfig{
     private final JwtRequestFilter jwtRequestFilter;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, @Value("${spring.ssl-enabled:false}") boolean sslEnabled) throws Exception {
 		http.cors().and().csrf().disable();
     	http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
@@ -41,6 +42,10 @@ public class WebSecurityConfig{
             .antMatchers(HttpMethod.POST, "/categories").hasAuthority("ROLE_ADMIN")
     		.anyRequest().authenticated();
         http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //Add filters for JWT
+
+        if(sslEnabled){
+            http.requiresChannel().anyRequest().requiresSecure();
+        }
 
         return http.build();
     }
