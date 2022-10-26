@@ -82,6 +82,7 @@ public class MPIntegrationServiceTest {
                 orderItem2.getProduct().getPrice().multiply(BigDecimal.valueOf(orderItem2.getQuantity()))
             );
         orderDetails = new OrderDetails(total, buyer, orderItems);
+        orderDetails.setId(1L);
     }
 
     @Test

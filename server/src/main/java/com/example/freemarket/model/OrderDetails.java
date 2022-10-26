@@ -5,7 +5,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,10 +48,12 @@ public class OrderDetails {
     @JsonManagedReference
     private List<OrderItem> orderItems;
 
-    // Set to true after been passing checkout
-    // an user can only have 1 order not checkout at a time
+    // Set to pending before passing checkout
+    // an user can only have 1 order pending at a time
     @NotNull
-    private boolean isConfirmed;
+    @Enumerated(EnumType.STRING)
+    @Column(name="paymentStatus")
+    private EnumPaymentStatus paymentStatus;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.freemarket.model.EnumPaymentStatus;
 import com.example.freemarket.model.OrderDetails;
 import com.example.freemarket.model.User;
 import com.example.freemarket.repository.OrderDetailsRepository;
@@ -18,12 +19,12 @@ public class OrderDetailsService implements IOrderDetailsService{
 
     public OrderDetails create(User user){
         OrderDetails orderDetails = null;
-        OrderDetails currentOrder = orderDetailsRepository.findAllByUserIdAndIsConfirmedFalse(user.getId());
+        OrderDetails currentOrder = orderDetailsRepository.findAllByUserIdAndPaymentStatus(user.getId(), EnumPaymentStatus.PENDING);
 
         if(currentOrder == null){
             orderDetails = new OrderDetails();
             orderDetails.setTotal(BigDecimal.valueOf(0));
-            orderDetails.setConfirmed(false);
+            orderDetails.setPaymentStatus(EnumPaymentStatus.PENDING);
             orderDetails.setUser(user);
             orderDetailsRepository.save(orderDetails);
         }
@@ -35,7 +36,7 @@ public class OrderDetailsService implements IOrderDetailsService{
     }
 
     public OrderDetails getActive(User user){
-        OrderDetails currentOrder = orderDetailsRepository.findAllByUserIdAndIsConfirmedFalse(user.getId());
+        OrderDetails currentOrder = orderDetailsRepository.findAllByUserIdAndPaymentStatus(user.getId(), EnumPaymentStatus.PENDING);
 
         // If there isn't an active order create it
         if(currentOrder == null)
@@ -53,6 +54,26 @@ public class OrderDetailsService implements IOrderDetailsService{
         
         if(optionalOrderDetails.isPresent()){
             orderDetails = optionalOrderDetails.get();
+        }
+
+        return orderDetails;
+    }
+
+    @Override
+    public OrderDetails approvePayment(Long id) {
+        OrderDetails orderDetails = getById(id);
+
+        if(orderDetails != null){
+            if(orderDetails.getPaymentStatus() != null
+                && orderDetails.getPaymentStatus() != EnumPaymentStatus.REFUNDED
+                && orderDetails.getPaymentStatus() != EnumPaymentStatus.CHARGED_BACK
+                && orderDetails.getPaymentStatus() != EnumPaymentStatus.CANCELLED){
+                orderDetails.setPaymentStatus(EnumPaymentStatus.APPROVED);
+                orderDetailsRepository.save(orderDetails);
+            }
+            else{
+                orderDetails = null;
+            }
         }
 
         return orderDetails;

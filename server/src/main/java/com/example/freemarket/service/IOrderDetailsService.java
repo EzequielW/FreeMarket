@@ -10,4 +10,5 @@ public interface IOrderDetailsService {
     OrderDetails create(User user);
     OrderDetails getActive(User user);
     OrderDetails getById(Long id);
+    OrderDetails approvePayment(Long id);
 }

@@ -65,10 +65,10 @@ public class MPIntegrationService implements IMPIntegrationService {
                     .build())
             .autoReturn("approved")
             .notificationUrl(notificationsURL)
+            .externalReference(orderDetails.getId().toString())
             .build();
 
         Preference preference = client.create(request, mpIntegrationConfig.getRequestOptions());
-
         return preference.getId();
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.example.freemarket.model.EnumPaymentStatus;
 import com.example.freemarket.model.OrderDetails;
 import com.example.freemarket.model.OrderItem;
 import com.example.freemarket.model.Role;
@@ -63,7 +64,7 @@ public class OrderDetailsServiceTest {
 
     @Test
     void create_validUser_returnOrder(){
-        given(orderDetailsRepository.findAllByUserIdAndIsConfirmedFalse(user.getId()))
+        given(orderDetailsRepository.findAllByUserIdAndPaymentStatus(user.getId(), EnumPaymentStatus.PENDING))
             .willReturn(orderDetails);
 
         assertEquals(orderDetails, orderDetailsService.create(user));
@@ -71,7 +72,7 @@ public class OrderDetailsServiceTest {
 
     @Test
     void getActive_orderActive_returnOrder(){
-        given(orderDetailsRepository.findAllByUserIdAndIsConfirmedFalse(user.getId()))
+        given(orderDetailsRepository.findAllByUserIdAndPaymentStatus(user.getId(), EnumPaymentStatus.PENDING))
             .willReturn(orderDetails);
 
         assertEquals(orderDetails, orderDetailsService.getActive(user));
@@ -85,5 +86,27 @@ public class OrderDetailsServiceTest {
             .willReturn(optional);
 
         assertEquals(orderDetails, orderDetailsService.getById(1L));
+    }
+
+    @Test
+    void approvePayment_validOrder_returnOrderApproved(){
+        orderDetails.setId(1L);
+        orderDetails.setPaymentStatus(EnumPaymentStatus.PENDING);
+        Optional<OrderDetails> optional = Optional.of(orderDetails);
+        given(orderDetailsRepository.findById(1L))
+            .willReturn(optional);
+
+        assertEquals(orderDetails, orderDetailsService.approvePayment(1L));
+    }
+
+    @Test
+    void approvePayment_chargeBackOrder_returnNull(){
+        orderDetails.setId(1L);
+        orderDetails.setPaymentStatus(EnumPaymentStatus.CHARGED_BACK);
+        Optional<OrderDetails> optional = Optional.of(orderDetails);
+        given(orderDetailsRepository.findById(1L))
+            .willReturn(optional);
+
+        assertEquals(null, orderDetailsService.approvePayment(1L));
     }
 }
