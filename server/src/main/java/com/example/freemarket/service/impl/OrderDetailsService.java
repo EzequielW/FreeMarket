@@ -76,11 +76,12 @@ public class OrderDetailsService implements IOrderDetailsService{
                 && orderDetails.getPaymentStatus() != EnumPaymentStatus.CHARGED_BACK
                 && orderDetails.getPaymentStatus() != EnumPaymentStatus.CANCELLED){
 
-                BigDecimal total = BigDecimal.valueOf(0.0);
+                BigDecimal total = BigDecimal.ZERO;
                 for(OrderItem oi: orderDetails.getOrderItems()){
                     BigDecimal quantity = BigDecimal.valueOf(oi.getQuantity());
-                    total.add(oi.getProduct().getPrice().multiply(quantity));
+                    total = total.add(oi.getProduct().getPrice().multiply(quantity));
                 }
+                System.out.println(total);
                 
                 orderDetails.setTotal(total);
                 orderDetails.setPaymentStatus(EnumPaymentStatus.APPROVED);
