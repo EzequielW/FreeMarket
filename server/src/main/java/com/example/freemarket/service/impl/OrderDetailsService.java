@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.freemarket.model.EnumPaymentStatus;
 import com.example.freemarket.model.OrderDetails;
+import com.example.freemarket.model.OrderItem;
 import com.example.freemarket.model.User;
 import com.example.freemarket.repository.OrderDetailsRepository;
 import com.example.freemarket.service.IOrderDetailsService;
@@ -74,6 +75,14 @@ public class OrderDetailsService implements IOrderDetailsService{
                 && orderDetails.getPaymentStatus() != EnumPaymentStatus.REFUNDED
                 && orderDetails.getPaymentStatus() != EnumPaymentStatus.CHARGED_BACK
                 && orderDetails.getPaymentStatus() != EnumPaymentStatus.CANCELLED){
+
+                BigDecimal total = BigDecimal.valueOf(0.0);
+                for(OrderItem oi: orderDetails.getOrderItems()){
+                    BigDecimal quantity = BigDecimal.valueOf(oi.getQuantity());
+                    total.add(oi.getProduct().getPrice().multiply(quantity));
+                }
+                
+                orderDetails.setTotal(total);
                 orderDetails.setPaymentStatus(EnumPaymentStatus.APPROVED);
                 orderDetailsRepository.save(orderDetails);
             }
