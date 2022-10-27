@@ -1,6 +1,7 @@
 package com.example.freemarket.service.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,11 @@ public class OrderDetailsService implements IOrderDetailsService{
         }
 
         return currentOrder;
+    }
+
+    public List<OrderDetails> getByUser(User user){
+        List<OrderDetails> orderDetailsList = orderDetailsRepository.findAllByUserId(user.getId());
+        return orderDetailsList;
     }
 
     @Override

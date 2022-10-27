@@ -1,5 +1,7 @@
 package com.example.freemarket.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,49 +37,30 @@ public class OrderDetailsController {
     @Autowired
     IMPIntegrationService mpIntegrationService;
 
-    // @Operation(summary="Creates a new order of products for a user")
-    // @PostMapping
-    // public ResponseEntity<Object> create(@RequestBody OrderDetailsRequest orderDetailsRequest, Authentication authentication) {
-    //     User user = userService.getByEmail(authentication.getName());
-    //     boolean invalidRequest = false;
-
-    //     OrderDetails newOrderDetails = new OrderDetails();
-    //     newOrderDetails.setUser(user);
-    //     Set<OrderItem> orderItems = new HashSet<>();
-    //     for(OrderItemRequest oi: orderDetailsRequest.getOrderItemRequests()){
-    //         Product product = productService.getById(oi.getProductId());
-    //         if(product == null || oi.getQuantity() == 0){
-    //             invalidRequest = true;
-    //         }
-    //         orderItems.add(new OrderItem(product, oi.getQuantity()));
-    //     }
-    //     newOrderDetails.setOrderItems(orderItems);
-
-    //     OrderDetails orderDetails = null;
-    //     if(!invalidRequest){
-    //         orderDetails = orderDetailsService.create(newOrderDetails);
-    //     }
-
-    //     if(orderDetails != null){
-    //         return ResponseEntity.ok(newOrderDetails);
-    //     } 
-    //     else if(invalidRequest){
-    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Request");
-    //     }
-    //     else {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
-    //     }
-    // }
-
     @Operation(summary="Get user active order details")
     @GetMapping("/active")
-    public ResponseEntity<Object> create(Authentication authentication) {
+    public ResponseEntity<Object> getActive(Authentication authentication) {
         User user = userService.getByEmail(authentication.getName());
 
         OrderDetails orderDetails = orderDetailsService.getActive(user);
 
         if(orderDetails != null){
             return ResponseEntity.ok(orderDetails);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
+    }
+
+    @Operation(summary="Get user order history")
+    @GetMapping("/")
+    public ResponseEntity<Object> getAllByUser(Authentication authentication) {
+        User user = userService.getByEmail(authentication.getName());
+
+        List<OrderDetails> orderDetailsList = orderDetailsService.getByUser(user);
+
+        if(orderDetailsList != null){
+            return ResponseEntity.ok(orderDetailsList);
         }
         else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");

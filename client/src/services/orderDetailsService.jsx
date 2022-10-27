@@ -10,6 +10,14 @@ const getActive = async (token) => {
     });
 }
 
+const getAllByUser = async (token) => {
+    return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}/`, {
+        headers: {
+            Authorization: token
+        }
+    });
+}
+
 const checkout = async (token) => {
     return await axios.post(`${process.env.REACT_APP_SERVER_URL}${basePath}/checkout`, {}, {
         headers: {
@@ -20,7 +28,8 @@ const checkout = async (token) => {
 
 const orderDetailsService = {
     getActive,
-    checkout
+    checkout,
+    getAllByUser
 }
 
 export default orderDetailsService;
