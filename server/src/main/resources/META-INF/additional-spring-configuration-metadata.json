@@ -28,5 +28,10 @@
     "name": "spring.ssl-enabled",
     "type": "java.lang.String",
     "description": "A description for 'spring.ssl-enabled'"
+  },
+  {
+    "name": "spring.fake.webhook",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.fake.webhook'"
   }
 ]}

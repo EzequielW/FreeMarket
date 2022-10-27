@@ -26,6 +26,8 @@ public class MPIntegrationService implements IMPIntegrationService {
 	private String REACT_APP_URL;
     @Value("${spring.datasource.server-url}")
     private String SERVER_URL;
+    @Value("${spring.fake.webhook:false}")
+    private boolean FAKE_WEBHOOK;
 
     @Autowired
     OrderDetailsService orderDetailsService;
@@ -69,6 +71,12 @@ public class MPIntegrationService implements IMPIntegrationService {
             .build();
 
         Preference preference = client.create(request, mpIntegrationConfig.getRequestOptions());
+
+        // Only for testing
+        if(FAKE_WEBHOOK){
+            orderDetailsService.approvePayment(orderDetails.getId());
+        }
+
         return preference.getId();
     }
 }
