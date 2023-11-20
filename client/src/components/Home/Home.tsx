@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box } from '@mui/material';
 
@@ -10,7 +11,9 @@ import orderDetailsService from '../../services/orderDetailsService';
 
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
-    const [orderDetails, setOrderDetails] = useState({});
+    const [orderDetails, setOrderDetails] = useState({
+        orderItems: []
+    });
 
     const getOrderDetails = async () => {
         try{

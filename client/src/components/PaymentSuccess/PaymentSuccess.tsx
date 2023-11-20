@@ -1,9 +1,10 @@
+import * as React from 'react';
 import { Container, Typography } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import Header from '../Header/Header';
 
-const PaymentSuccess = ({user}) => {
+const PaymentSuccess = () => {
     return (
         <div>
             <Header />

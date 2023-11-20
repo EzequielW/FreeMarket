@@ -1,0 +1,44 @@
+version: '3.9'
+services:
+  freemarket_api:
+    container_name: freemarket_api
+    build: 
+      dockerfile: .dockerfile
+    ports:
+      - "8091:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    volumes:
+      - freemarket-filestorage:/app/images
+    networks:
+      - freemarket-network
+  mysql:
+    image: mysql:8.2
+    container_name: mysql
+    hostname: mysql
+    env_file:
+      - mysql.env
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - freemarket-network
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8090:8080
+    networks:
+      - freemarket-network
+
+networks:
+  freemarket-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  freemarket-filestorage:

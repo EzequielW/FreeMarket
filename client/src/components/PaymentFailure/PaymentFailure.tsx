@@ -1,9 +1,10 @@
+import * as React from 'react';
 import { Container, Typography } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 
 import Header from '../Header/Header';
 
-const PaymentPending = ({user}) => {
+const PaymentPending = () => {
     return (
         <div>
             <Header />

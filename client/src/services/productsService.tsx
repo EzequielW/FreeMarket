@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const basePath = 'products';
 
-const getAll = async (token) => {
+const getAll = async (token: string) => {
     return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}/`, {
         headers: {
             Authorization: token
@@ -10,7 +10,7 @@ const getAll = async (token) => {
     });
 }
 
-const getByCategoryId = async (token, categoryId) => {
+const getByCategoryId = async (token: string, categoryId: number) => {
     return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}?categoryId=${categoryId}`, {
         headers: {
             Authorization: token

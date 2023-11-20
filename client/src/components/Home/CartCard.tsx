@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState } from 'react';
 import { Box, Paper, Grow, Typography, Button, CardMedia, Fab, 
     Badge, CircularProgress, Collapse } from '@mui/material';
@@ -95,7 +96,7 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
                                                         </Typography>
                                                     </Box>
                                                     <Typography>
-                                                        {'$' + oi.product.price * oi.quantity}
+                                                        {'$' + (oi.product.price * oi.quantity).toFixed(2)}
                                                     </Typography>
                                                 </Box>
                                                 <Box sx={{ display: 'flex' }}>

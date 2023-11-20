@@ -11,6 +11,10 @@ const pages = [
     {
         name: 'Products',
         link: '/'
+    },
+    {
+        name: 'orders',
+        link: '/orders'
     }
 ];
 const settings = [

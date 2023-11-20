@@ -3,6 +3,8 @@ package com.example.freemarket.security;
 import javax.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Value;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,18 +35,18 @@ public class WebSecurityConfig{
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, @Value("${spring.ssl-enabled:false}") boolean sslEnabled) throws Exception {
-		http.cors().and().csrf().disable();
-    	http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests()
-    		.antMatchers("/auth/login/**", "/auth/register/**", "/api-docs/***",
-                "/swagger-ui/**","/","/api-docs", "/public/**", "/payments/notifications/**").permitAll()
-    		.antMatchers(HttpMethod.POST, "/products").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-            .antMatchers(HttpMethod.POST, "/categories").hasAuthority("ROLE_ADMIN")
-    		.anyRequest().authenticated();
+        http.cors(withDefaults()).csrf(csrf -> csrf.disable());
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authorizeRequests(requests -> requests
+                .antMatchers("/auth/login/**", "/auth/register/**", "/api-docs/***",
+                        "/swagger-ui/**", "/", "/api-docs", "/public/**", "/payments/notifications/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/products").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/categories").hasAuthority("ROLE_ADMIN")
+                .anyRequest().authenticated());
         http.addFilterBefore((Filter) jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //Add filters for JWT
 
         if(sslEnabled){
-            http.requiresChannel().anyRequest().requiresSecure();
+            http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
         }
 
         return http.build();

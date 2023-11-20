@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Card, CardMedia, Box, CardContent, Typography, Button } from '@mui/material';
 import { AddShoppingCart } from '@mui/icons-material';
 
@@ -8,11 +8,13 @@ const ProductCard = ({product, orderItems, token, updateCart}) => {
     const addToCart = async () => {
         try{
             const newOrderItem = {
+                id: 0,
                 productId: product.id,
                 quantity: 1
             }
 
-            const orderItem = orderItems.find(oi => oi.id === product.id);
+            console.log('productid', product.id, 'orderItems', orderItems);
+            const orderItem = orderItems.find(oi => oi.product.id === product.id);
 
             if(orderItem){
                 newOrderItem.quantity += orderItem.quantity;
@@ -50,7 +52,7 @@ const ProductCard = ({product, orderItems, token, updateCart}) => {
                         { product ? product.name : "Placeholder title" }
                     </Typography>
                     <Typography component="div" variant="h5">
-                        ${ product ? product.price : "00.00" }
+                        ${ product ? product.price.toFixed(2) : "00.00" }
                     </Typography>
                 </Box>
                 <Button variant='contained' startIcon={<AddShoppingCart />} sx={{ alignSelf: 'flex-start'}} onClick={addToCart}>Add to cart</Button>

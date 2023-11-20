@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react';
 import { Container, Typography, TextField, Button, 
     Checkbox, FormControlLabel, Paper, CircularProgress, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from "react-router-dom";

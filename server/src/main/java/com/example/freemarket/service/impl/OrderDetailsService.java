@@ -81,7 +81,6 @@ public class OrderDetailsService implements IOrderDetailsService{
                     BigDecimal quantity = BigDecimal.valueOf(oi.getQuantity());
                     total = total.add(oi.getProduct().getPrice().multiply(quantity));
                 }
-                System.out.println(total);
                 
                 orderDetails.setTotal(total);
                 orderDetails.setPaymentStatus(EnumPaymentStatus.APPROVED);
