@@ -60,12 +60,11 @@ const Header = () => {
                         display: { xs: 'none', md: 'flex' },
                         fontFamily: 'monospace',
                         fontWeight: 700,
-                        letterSpacing: '.3rem',
                         color: 'inherit',
                         textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        FreeMarket
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
