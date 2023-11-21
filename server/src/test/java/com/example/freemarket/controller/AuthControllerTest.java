@@ -57,6 +57,7 @@ public class AuthControllerTest extends SecurityEnabledSetup {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
+                .secure(true)
             )
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
@@ -84,6 +85,7 @@ public class AuthControllerTest extends SecurityEnabledSetup {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
+                .secure(true)
             )
             .andDo(print())
             .andExpect(status().is2xxSuccessful());

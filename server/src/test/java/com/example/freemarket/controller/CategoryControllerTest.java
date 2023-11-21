@@ -56,6 +56,7 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
+                .secure(true)
             )
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
@@ -72,6 +73,7 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
+                .secure(true)
             )
             .andDo(print())
             .andExpect(status().is4xxClientError());
@@ -83,7 +85,7 @@ public class CategoryControllerTest extends SecurityEnabledSetup{
         given(categoryService.getAll())
             .willReturn(categories);
 
-        mockMvc.perform(get("/categories"))
+        mockMvc.perform(get("/categories").secure(true))
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
     }

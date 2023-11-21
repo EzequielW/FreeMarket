@@ -5,7 +5,7 @@ services:
     build: 
       dockerfile: .dockerfile
     ports:
-      - "8091:8080"
+      - 8092:8080
     depends_on:
       - mysql
     env_file:
@@ -26,6 +26,7 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - freemarket-network
+    command: --skip-performance-schema --skip-mysqlx
   adminer:
     image: adminer
     container_name: adminer

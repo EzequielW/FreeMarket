@@ -79,6 +79,7 @@ public class ProductControllerTest extends SecurityEnabledSetup{
         mockMvc.perform(post("/products")
                 .contentType("multipart/form-data")
                 .flashAttr("productRequest", productRequest)
+                .secure(true)
             )
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
@@ -90,7 +91,7 @@ public class ProductControllerTest extends SecurityEnabledSetup{
         given(productService.getAll())
             .willReturn(products);
 
-        mockMvc.perform(get("/products"))
+        mockMvc.perform(get("/products").secure(true))
             .andDo(print())
             .andExpect(status().is2xxSuccessful());
     }
