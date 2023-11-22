@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box } from '@mui/material';
 
-import Header from '../Header/Header';
+import MainLayout from '../../layouts/MainLayout';
 import OrderCard from './OrderCard';
 
 import orderDetailsService from '../../services/orderDetailsService';
@@ -27,8 +27,7 @@ const Orders = ({user}) => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <div>
-            <Header />
+        <MainLayout>
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -44,7 +43,7 @@ const Orders = ({user}) => {
                     </Grid>
                 </Grid>
             </Container>
-        </div>
+        </MainLayout>
     );
 }
 

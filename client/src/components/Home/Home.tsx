@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Container, Grid, Box } from '@mui/material';
 
-import Header from '../Header/Header';
 import ProductCard from './ProductCard';
 import CartCard from './CartCard';
 import CategoryFilter from './CategoryFilter';
 import productsService from '../../services/productsService';
 import orderDetailsService from '../../services/orderDetailsService';
+import MainLayout from '../../layouts/MainLayout';
 
 const Home = ({user}) => {
     const [products, setProducts] = useState([]);
@@ -39,8 +39,7 @@ const Home = ({user}) => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <div>
-            <Header />
+        <MainLayout>
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
@@ -63,7 +62,7 @@ const Home = ({user}) => {
                     <CartCard token={user.token} orderItems={orderDetails.orderItems} getOrderDetails={getOrderDetails} />
                 }
             </Container>
-        </div>
+        </MainLayout>
     );
 }
 
