@@ -1,9 +1,9 @@
 interface Product{
     id: number,
     name: string,
-    image: string,
+    imagePath: string,
     price: number,
-    created_at: string,
+    createdAt: string,
     status: number,
 }
 
