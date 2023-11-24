@@ -10,7 +10,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import OrdersTable from '../OrdersAdmin/OrdersTable';
 import AdminLayout from '../../layouts/AdminLayout';
 
-const Dashboard = ({user}) => {
+const Dashboard = () => {
     const topCategories = [
         {
             data: [

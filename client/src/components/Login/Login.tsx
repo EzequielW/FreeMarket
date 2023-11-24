@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Container, Typography, TextField, Button, 
     Checkbox, FormControlLabel, Paper, CircularProgress, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+
+import ServerApi from '../../config/axios';
 import authService from '../../services/authService';
 
 const Login = () => {
@@ -36,6 +38,24 @@ const Login = () => {
             sessionStorage.setItem('name', data.name);
             sessionStorage.setItem('role', data.role);
             sessionStorage.setItem('token', token ? token : '');
+
+            if(token) {
+                ServerApi.interceptors.request.use(
+                    (config) => {
+                        const token = sessionStorage.getItem('token');
+                        return {
+                            ...config,
+                            headers: {
+                                Authorization: `${token}`,
+                                ...config.headers,
+                            },
+                        };
+                    },
+                    (error) => {
+                        return Promise.reject(error);
+                    }
+                );
+            }
 
             navigate('/');
         } catch(err){

@@ -1,29 +1,17 @@
-import axios from 'axios';
+import ServerApi from '../config/axios';
 
 const basePath = 'order_details';
 
-const getActive = async (token) => {
-    return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}/active`, {
-        headers: {
-            Authorization: token
-        }
-    });
+const getActive = async () => {
+    return await ServerApi.get(`${basePath}/active`);
 }
 
-const getAllByUser = async (token) => {
-    return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}/`, {
-        headers: {
-            Authorization: token
-        }
-    });
+const getAllByUser = async () => {
+    return await ServerApi.get(`${basePath}/`);
 }
 
-const checkout = async (token) => {
-    return await axios.post(`${process.env.REACT_APP_SERVER_URL}${basePath}/checkout`, {}, {
-        headers: {
-            Authorization: token
-        }
-    });
+const checkout = async () => {
+    return await ServerApi.post(`${basePath}/checkout`);
 }
 
 const orderDetailsService = {

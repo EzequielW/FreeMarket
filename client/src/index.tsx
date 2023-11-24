@@ -25,9 +25,9 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={ <Navigate to="/products" /> } />
-      <Route path="/products" element={ <AuthGuard><Home user={undefined}/></AuthGuard> } />
-      <Route path="/orders" element={ <AuthGuard><Orders user={undefined}/></AuthGuard> } />
-      <Route path="/dashboard" element={ <AuthGuard><Dashboard user={undefined}/></AuthGuard> } />
+      <Route path="/products" element={ <AuthGuard><Home /></AuthGuard> } />
+      <Route path="/orders" element={ <AuthGuard><Orders /></AuthGuard> } />
+      <Route path="/dashboard" element={ <AuthGuard><Dashboard /></AuthGuard> } />
       <Route path="/products_admin" element={ <AuthGuard><ProductsAdmin /></AuthGuard> } />
       <Route path="/products_admin/create" element={ <AuthGuard><CreateProduct /></AuthGuard> } />
       <Route path="/orders_admin" element={ <AuthGuard><OrdersAdmin /></AuthGuard> } />

@@ -1,13 +1,9 @@
-import axios from 'axios';
+import ServerApi from '../config/axios';
 
 const basePath = 'categories';
 
-const getAll = async (token) => {
-    return await axios.get(`${process.env.REACT_APP_SERVER_URL}${basePath}/`, {
-        headers: {
-            Authorization: token
-        }
-    });
+const getAll = async () => {
+    return await ServerApi.get(`${basePath}/`);
 }
 
 const categoriesService = {

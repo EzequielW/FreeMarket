@@ -7,12 +7,12 @@ import OrderCard from './OrderCard';
 
 import orderDetailsService from '../../services/orderDetailsService';
 
-const Orders = ({user}) => {
+const Orders = () => {
     const [odList, setODList] = useState([]);
 
     const getOrderHistory = async () => {
         try{
-            const response = await orderDetailsService.getAllByUser(user.token);
+            const response = await orderDetailsService.getAllByUser();
             setODList(response.data.filter((o: any) => o.orderItems.length > 0));
         } catch(err){
             console.log(err);
@@ -34,7 +34,7 @@ const Orders = ({user}) => {
                         {
                             odList.map(od => {
                                 return (
-                                    <Box key={od.id} sx={{ mb: 2 }}>
+                                    <Box key={'order_' + od.id} sx={{ mb: 2 }}>
                                         <OrderCard orderItems={od.orderItems} paymentStatus={od.paymentStatus} createdAt={od.createdAt} />
                                     </Box>
                                 );

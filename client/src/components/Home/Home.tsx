@@ -9,7 +9,7 @@ import productsService from '../../services/productsService';
 import orderDetailsService from '../../services/orderDetailsService';
 import MainLayout from '../../layouts/MainLayout';
 
-const Home = ({user}) => {
+const Home = () => {
     const [products, setProducts] = useState([]);
     const [orderDetails, setOrderDetails] = useState({
         orderItems: []
@@ -17,17 +17,17 @@ const Home = ({user}) => {
 
     const getOrderDetails = async () => {
         try{
-            const response = await orderDetailsService.getActive(user.token);
+            const response = await orderDetailsService.getActive();
             setOrderDetails(response.data);
         } catch(err){
             console.log(err);
         }
     }
 
-    useEffect((token = user.token) => {
+    useEffect(() => {
         const loadData = async () => {
             try{
-                const response = await productsService.getAll(token);
+                const response = await productsService.getAll();
                 setProducts(response.data);
             } catch(err){
                 console.log(err);
@@ -43,14 +43,14 @@ const Home = ({user}) => {
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <CategoryFilter token={user.token} setProducts={setProducts} />
+                        <CategoryFilter setProducts={setProducts} />
                     </Grid>
                     <Grid item xs={8}>
                         {
                             products.map(p => {
                                 return (
                                     <Box key={p.id} sx={{ mb: 2 }}>
-                                        <ProductCard product={p} orderItems={orderDetails.orderItems} token={user.token} updateCart={getOrderDetails} />
+                                        <ProductCard product={p} orderItems={orderDetails.orderItems} updateCart={getOrderDetails} />
                                     </Box>
                                 );
                             })
@@ -59,7 +59,7 @@ const Home = ({user}) => {
                 </Grid>
                 { // Show cart only if there are items already
                     orderDetails && orderDetails.orderItems && orderDetails.orderItems.length > 0 &&
-                    <CartCard token={user.token} orderItems={orderDetails.orderItems} getOrderDetails={getOrderDetails} />
+                    <CartCard orderItems={orderDetails.orderItems} getOrderDetails={getOrderDetails} />
                 }
             </Container>
         </MainLayout>

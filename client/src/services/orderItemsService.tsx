@@ -1,29 +1,17 @@
-import axios from 'axios';
+import ServerApi from '../config/axios';
 
 const basePath = 'order_items';
 
-const create = async (token, orderItem) => {
-    return await axios.post(`${process.env.REACT_APP_SERVER_URL}${basePath}/`, orderItem, {
-        headers: {
-            Authorization: token
-        }
-    });
+const create = async (orderItem) => {
+    return await ServerApi.post(`${basePath}/`, orderItem);
 }
 
-const update = async (token, orderItem) => {
-    return await axios.put(`${process.env.REACT_APP_SERVER_URL}${basePath}/${orderItem.id}`, orderItem, {
-        headers: {
-            Authorization: token
-        }
-    });
+const update = async (orderItem) => {
+    return await ServerApi.put(`${basePath}/${orderItem.id}`, orderItem);
 }
 
-const deleteOne = async (token, id) => {
-    return await axios.delete(`${process.env.REACT_APP_SERVER_URL}${basePath}/${id}`, {
-        headers: {
-            Authorization: token
-        }
-    });
+const deleteOne = async (id) => {
+    return await ServerApi.delete(`${basePath}/${id}`);
 }
 
 const orderItemsService = {

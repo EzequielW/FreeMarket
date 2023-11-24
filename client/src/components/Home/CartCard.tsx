@@ -9,7 +9,7 @@ import { AddCircle, RemoveCircle, ShoppingCart } from '@mui/icons-material';
 import orderItemsService from '../../services/orderItemsService';
 import orderDetailsService from '../../services/orderDetailsService';
 
-const CartCard = ({token, orderItems, getOrderDetails}) => {
+const CartCard = ({orderItems, getOrderDetails}) => {
     const [showCart, setShowCart] = useState(false);
 
     const mercadopago = new window.MercadoPago(process.env.REACT_APP_MP_PUBLIC_KEY, {
@@ -32,7 +32,7 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
                 quantity: newQuantity
             };
 
-            const response = await orderItemsService.update(token, updatedOrderItem);
+            const response = await orderItemsService.update(updatedOrderItem);
             console.log(response.data);
             await getOrderDetails();
         } catch(err){
@@ -42,7 +42,7 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
 
     const removeOrderItem = async (orderItem) => {
         try{
-            const response = await orderItemsService.deleteOne(token, orderItem.id);
+            const response = await orderItemsService.deleteOne(orderItem.id);
             console.log(response.data);
             await getOrderDetails();
         } catch(err){
@@ -52,7 +52,7 @@ const CartCard = ({token, orderItems, getOrderDetails}) => {
 
     const checkoutOrder = async () => {
         try{
-            const response = await orderDetailsService.checkout(token);
+            const response = await orderDetailsService.checkout();
             mercadopago.checkout({
                 preference: {
                   id: response.data

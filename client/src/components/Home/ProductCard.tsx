@@ -4,7 +4,7 @@ import { AddShoppingCart } from '@mui/icons-material';
 
 import orderItemsService from '../../services/orderItemsService';
 
-const ProductCard = ({product, orderItems, token, updateCart}) => {
+const ProductCard = ({product, orderItems, updateCart}) => {
     const addToCart = async () => {
         try{
             const newOrderItem = {
@@ -19,10 +19,10 @@ const ProductCard = ({product, orderItems, token, updateCart}) => {
             if(orderItem){
                 newOrderItem.quantity += orderItem.quantity;
                 newOrderItem.id = orderItem.id;
-                await orderItemsService.update(token, newOrderItem);
+                await orderItemsService.update(newOrderItem);
             }
             else{
-                await orderItemsService.create(token, newOrderItem);
+                await orderItemsService.create(newOrderItem);
             }
             updateCart();
         } catch(err){

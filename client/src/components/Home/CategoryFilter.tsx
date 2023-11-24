@@ -7,14 +7,14 @@ import { Search } from '@mui/icons-material';
 import productsService from '../../services/productsService';
 import categoriesService from '../../services/categoriesService';
 
-const CategoryFilter = ({token, setProducts}) => {
+const CategoryFilter = ({ setProducts }) => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState({ id: 0, name: "All"});
 
     const searchProducts = async () => {
         if(selectedCategory.id === 0){
             try{
-                const response = await productsService.getAll(token);
+                const response = await productsService.getAll();
                 setProducts(response.data);
             } catch(err){
                 console.log(err);
@@ -22,7 +22,7 @@ const CategoryFilter = ({token, setProducts}) => {
         }
         else{
             try{
-                const response = await productsService.getByCategoryId(token, selectedCategory.id);
+                const response = await productsService.getByCategoryId(selectedCategory.id);
                 setProducts(response.data);
             } catch(err){
                 console.log(err);
@@ -33,7 +33,7 @@ const CategoryFilter = ({token, setProducts}) => {
     useEffect(() => {
         const loadData = async () => {
             try{
-                const response = await categoriesService.getAll(token);
+                const response = await categoriesService.getAll();
                 let resCategories = response.data;
                 resCategories = resCategories.map(c => {
                     return { ...c, filter: false };

@@ -27,7 +27,7 @@ const ProductCard = ({orderItems, paymentStatus, createdAt}) => {
                 {
                     orderItems.map(oi => {
                         return (
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem' }}>
+                            <Box key={oi.id} sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem' }}>
                                 <Typography component="div" variant="h6">
                                     { oi.product.name }
                                     <Typography component="div" variant="subtitle2">
