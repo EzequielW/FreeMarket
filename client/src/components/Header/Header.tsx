@@ -45,19 +45,6 @@ interface HeaderProps {
     drawerWidth?: number
 }
 
-// transition: theme.transitions.create(['margin', 'width'], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-// }),
-// ...(open && {
-//     width: `calc(100% - ${headerProps.drawerWidth ? headerProps.drawerWidth : 0}px)`,
-//     marginLeft: `${headerProps.drawerWidth ? headerProps.drawerWidth : 0}px`,
-//     transition: theme.transitions.create(['margin', 'width'], {
-//     easing: theme.transitions.easing.easeOut,
-//     duration: theme.transitions.duration.enteringScreen,
-//     }),
-// }),
-
 const Header = (headerProps: HeaderProps) => {
     const navigate = useNavigate();
     const theme = useTheme();
@@ -197,7 +184,7 @@ const Header = (headerProps: HeaderProps) => {
                             ))}
                         </Box>
 
-                        <Button variant='outlined' sx={dashboardButtonStyle} href="/dashboard">
+                        <Button component={Link} variant='outlined' sx={dashboardButtonStyle} to="/dashboard">
                             Dashboard
                         </Button>
 

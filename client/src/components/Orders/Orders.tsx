@@ -13,7 +13,7 @@ const Orders = ({user}) => {
     const getOrderHistory = async () => {
         try{
             const response = await orderDetailsService.getAllByUser(user.token);
-            setODList(response.data);
+            setODList(response.data.filter((o: any) => o.orderItems.length > 0));
         } catch(err){
             console.log(err);
         }

@@ -17,6 +17,7 @@ import LoginGuard from './util/LoginGuard';
 import ProductsAdmin from './components/ProductsAdmin/ProductsAdmin';
 import OrdersAdmin from './components/OrdersAdmin/OrdersAdmin';
 import SettingsAdmin from './components/SettingsAdmin/SettingsAdmin';
+import CreateProduct from './components/CreateProduct/CreateProduct';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -28,6 +29,7 @@ root.render(
       <Route path="/orders" element={ <AuthGuard><Orders user={undefined}/></AuthGuard> } />
       <Route path="/dashboard" element={ <AuthGuard><Dashboard user={undefined}/></AuthGuard> } />
       <Route path="/products_admin" element={ <AuthGuard><ProductsAdmin /></AuthGuard> } />
+      <Route path="/products_admin/create" element={ <AuthGuard><CreateProduct /></AuthGuard> } />
       <Route path="/orders_admin" element={ <AuthGuard><OrdersAdmin /></AuthGuard> } />
       <Route path="/settings_admin" element={ <AuthGuard><SettingsAdmin /></AuthGuard> } />
       <Route path="login" element={ <LoginGuard><Login/></LoginGuard> } />

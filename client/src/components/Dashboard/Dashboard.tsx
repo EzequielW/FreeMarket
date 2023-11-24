@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Avatar, Box, Container, Grid, Paper, Typography,  } from '@mui/material';
-import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart, pieArcLabelClasses } from '@mui/x-charts/PieChart';
 import { LineChart } from '@mui/x-charts/LineChart';
 
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import PersonIcon from '@mui/icons-material/Person';
 import InventoryIcon from '@mui/icons-material/Inventory';
 
-import CustomizedTable from './CustomTable';
+import OrdersTable from '../OrdersAdmin/OrdersTable';
 import AdminLayout from '../../layouts/AdminLayout';
 
 const Dashboard = ({user}) => {
@@ -20,14 +20,16 @@ const Dashboard = ({user}) => {
                 { id: 3, value: 20, label: 'SSD' },
             ],
             innerRadius: 60,
-            outerRadius: 100,
-            paddingAngle: 2
+            outerRadius: 120,
+            paddingAngle: 2,
+            arcLabel: (item) => `${item.value}%`,
+            arcLabelMinAngle: 45,
         },
     ];
 
     return (
         <AdminLayout>
-            <Container maxWidth='xl' sx={{ py: 4 }}>
+            <Container maxWidth='xl'>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
                         <Paper sx={{ padding: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'warning.main' }}>
@@ -87,6 +89,12 @@ const Dashboard = ({user}) => {
                                       padding: 0,
                                     }
                                 }}
+                                sx={{
+                                    [`& .${pieArcLabelClasses.root}`]: {
+                                        fill: 'white',
+                                        fontWeight: 'bold',
+                                    },
+                                }}
                             />
                         </Paper>
                     </Grid>
@@ -104,7 +112,7 @@ const Dashboard = ({user}) => {
                         </Paper>
                     </Grid>
                     <Grid item xs={12}>
-                        <CustomizedTable />
+                        <OrdersTable latest={true} />
                     </Grid>
                 </Grid>
             </Container>
